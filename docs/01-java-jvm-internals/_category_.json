@@ -1,0 +1,10 @@
+{
+  "label": "1. JAVA & JVM INTERNALS",
+  "position": 1,
+  "collapsible": true,
+  "collapsed": true,
+  "link": {
+    "type": "doc",
+    "id": "jvm-complete-guide"
+  }
+}

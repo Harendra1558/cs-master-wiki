@@ -1,30 +1,386 @@
 /**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
+ * Custom CSS for Portfolio Website
+ * Modern, professional styling with vibrant gradients
  */
 
-/* You can override the default Infima variables here. */
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* Root Variables */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  /* Primary Colors - Purple/Blue Gradient Theme */
+  --ifm-color-primary: #667eea;
+  --ifm-color-primary-dark: #5568d3;
+  --ifm-color-primary-darker: #4e5ec7;
+  --ifm-color-primary-darkest: #3d4da4;
+  --ifm-color-primary-light: #7d94f7;
+  --ifm-color-primary-lighter: #8c9fff;
+  --ifm-color-primary-lightest: #b6c1ff;
+
+  /* Typography */
+  --ifm-font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
+  --ifm-font-size-base: 16px;
+  --ifm-line-height-base: 1.7;
+  --ifm-heading-font-weight: 700;
+
+  /* Spacing */
+  --ifm-spacing-horizontal: 1.5rem;
+  --ifm-spacing-vertical: 1.5rem;
+
+  /* Code */
   --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --ifm-code-border-radius: 6px;
+
+  /* Cards & Surfaces */
+  --ifm-card-background-color: #ffffff;
+  --ifm-background-surface-color: #f8f9fa;
+
+  /* Transitions */
+  --ifm-transition-fast: 200ms;
+  --ifm-transition-slow: 400ms;
+
+  /* Code highlighting */
+  --docusaurus-highlighted-code-line-bg: rgba(102, 126, 234, 0.1);
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
+/* Dark Theme */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --ifm-color-primary: #8c9fff;
+  --ifm-color-primary-dark: #7d94f7;
+  --ifm-color-primary-darker: #667eea;
+  --ifm-color-primary-darkest: #5568d3;
+  --ifm-color-primary-light: #a8b5ff;
+  --ifm-color-primary-lighter: #bac4ff;
+  --ifm-color-primary-lightest: #cfd8ff;
+
+  --ifm-background-color: #0d1117;
+  --ifm-background-surface-color: #161b22;
+  --ifm-card-background-color: #1c2128;
+  --ifm-font-color-base: #c9d1d9;
+
+  --docusaurus-highlighted-code-line-bg: rgba(140, 159, 255, 0.15);
+}
+
+/* Global Styles */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--ifm-font-family-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Smooth Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ifm-background-surface-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--ifm-color-primary);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ifm-color-primary-dark);
+}
+
+/* Typography Enhancements */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: var(--ifm-heading-font-weight);
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+  margin-bottom: 1.25rem;
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+a {
+  transition: color var(--ifm-transition-fast) ease;
+}
+
+/* Code Blocks */
+code {
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: var(--ifm-code-border-radius);
+  padding: 0.2rem 0.4rem;
+  font-size: var(--ifm-code-font-size);
+}
+
+pre code {
+  background: transparent;
+  padding: 0;
+}
+
+/* Blockquotes */
+blockquote {
+  border-left: 4px solid var(--ifm-color-primary);
+  background: var(--ifm-background-surface-color);
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+/* Tables */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5rem 0;
+}
+
+th,
+td {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--ifm-table-border-color);
+}
+
+th {
+  background: var(--ifm-background-surface-color);
+  font-weight: 600;
+}
+
+tr:hover {
+  background: var(--ifm-background-surface-color);
+}
+
+/* Buttons */
+.button {
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all var(--ifm-transition-fast) ease;
+  border: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.button--primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+}
+
+.button--primary:hover {
+  background: linear-gradient(135deg, #5568d3 0%, #6a4190 100%);
+}
+
+.button--secondary {
+  background: transparent;
+  border: 2px solid var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
+}
+
+.button--secondary:hover {
+  background: var(--ifm-color-primary);
+  color: white;
+}
+
+/* Cards */
+.card {
+  background: var(--ifm-card-background-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all var(--ifm-transition-slow) ease;
+}
+
+.card:hover {
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.2);
+  transform: translateY(-4px);
+}
+
+/* Navbar Enhancements */
+.navbar {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme='dark'] .navbar {
+  background: rgba(13, 17, 23, 0.9);
+}
+
+.navbar__item {
+  font-weight: 500;
+}
+
+.navbar__link:hover {
+  color: var(--ifm-color-primary);
+}
+
+/* Footer */
+.footer {
+  background: var(--ifm-background-surface-color);
+  padding: 3rem 0;
+}
+
+.footer__title {
+  font-weight: 700;
+  color: var(--ifm-color-primary);
+}
+
+/* Blog Cards */
+.blog-card {
+  transition: all var(--ifm-transition-slow) ease;
+}
+
+.blog-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.2);
+}
+
+/* Admonitions */
+.admonition {
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.admonition-icon {
+  margin-right: 0.5rem;
+}
+
+/* Pagination */
+.pagination {
+  margin-top: 3rem;
+}
+
+.pagination__item {
+  border-radius: 8px;
+}
+
+.pagination__item--active .pagination__link {
+  background: var(--ifm-color-primary);
+}
+
+/* TOC (Table of Contents) */
+.table-of-contents {
+  font-size: 0.9rem;
+}
+
+.table-of-contents__link {
+  transition: color var(--ifm-transition-fast) ease;
+}
+
+.table-of-contents__link:hover,
+.table-of-contents__link--active {
+  color: var(--ifm-color-primary);
+  font-weight: 600;
+}
+
+/* Doc Sidebar */
+.menu__link {
+  border-radius: 6px;
+  transition: all var(--ifm-transition-fast) ease;
+}
+
+.menu__link:hover {
+  background: var(--ifm-background-surface-color);
+  color: var(--ifm-color-primary);
+}
+
+.menu__link--active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white !important;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Utility Classes */
+.text-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.shadow-lg {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Utilities */
+@media (max-width: 996px) {
+  :root {
+    --ifm-font-size-base: 15px;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --ifm-font-size-base: 14px;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Force Footer Link Visibility */
+.footer__link-item {
+  color: #4a5568;
+  /* Dark Gray for Light Mode */
+  transition: color var(--ifm-transition-fast) ease;
+}
+
+.footer__link-item:hover {
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+[data-theme='dark'] .footer__link-item {
+  color: #e2e8f0;
+  /* Light Gray for Dark Mode */
 }

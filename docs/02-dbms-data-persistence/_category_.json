@@ -1,0 +1,10 @@
+{
+  "label": "2. DBMS & DATA PERSISTENCE",
+  "position": 2,
+  "collapsible": true,
+  "collapsed": true,
+  "link": {
+    "type": "doc",
+    "id": "dbms-data-persistence"
+  }
+}

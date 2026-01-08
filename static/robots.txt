@@ -1,0 +1,19 @@
+# Robots.txt for Portfolio & Blog Site
+# Allow all search engines to crawl the site
+
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://harendra1558.github.io/cs-master-wiki/sitemap.xml
+
+# Disallow specific paths
+Disallow: /admin/
+Disallow: /.docusaurus/
+Disallow: /build/
+Disallow: /node_modules/
+
+# Allow important sections
+Allow: /blog/
+Allow: /docs/
+Allow: /
