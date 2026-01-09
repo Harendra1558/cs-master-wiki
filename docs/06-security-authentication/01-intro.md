@@ -8,15 +8,28 @@ title: Syllabus & Overview
 ## Topics Covered
 
 ```text
-JWT & OAUTH
-- Access/Refresh tokens, Rotation
-- OIDC, RBAC
+JWT
+- Structure
+- Risks
+
+TOKEN MANAGEMENT
+- Access tokens
+- Refresh tokens
+- Rotation
+
+OAUTH / OIDC
+- Roles
+- Flow
 
 DEFENSE IN DEPTH
-- App/Gateway/DB layers
+- App layer
+- Gateway layer
+- DB layer
 
 COMMON ATTACKS
-- SQLi, XSS, CSRF
+- SQL Injection
+- XSS
+- CSRF
 ```
 
 ### Status

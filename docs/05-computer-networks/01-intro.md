@@ -9,16 +9,29 @@ title: Syllabus & Overview
 
 ```text
 TCP VS UDP
-- Reliability, Flow control
+- Reliability
+- Ordering
+
+TCP DETAILS
+- Handshake
+- Congestion control
 
 HTTP VERSIONS
-- HTTP/1.1, HTTP/2, HTTP/3 (QUIC)
+- HTTP/1.1
+- HTTP/2
+- HTTP/3 (QUIC)
+
+RETRIES & TIMEOUTS
+- Cascading failures
+- Idempotency keys
 
 MODERN PROTOCOLS
-- gRPC, WebSockets
+- gRPC
+- WebSockets
 
-RETRIES & TLS
-- Idempotency, SSL Handshake
+TLS
+- Handshake
+- Certificates
 ```
 
 ### Status

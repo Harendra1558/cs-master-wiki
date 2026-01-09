@@ -9,16 +9,27 @@ title: Syllabus & Overview
 
 ```text
 PROCESS & THREADS
-- Context switching, Scheduling
+- Context switching
+- Scheduling cost
 
 CPU VS IO
+- CPU-bound
+- IO-bound
 - Thread pool sizing
 
 MEMORY
-- Virtual memory, Paging, Swapping
+- Virtual memory
+- Paging
+- Swapping
+- OOM Killer
 
 LINUX BASICS
-- File descriptors, ulimit, top/htop
+- File descriptors
+- ulimit
+- top, htop
+
+SYSTEM CALLS
+- User vs Kernel mode
 ```
 
 ### Status

@@ -9,13 +9,20 @@ title: Syllabus & Overview
 
 ```text
 OBSERVABILITY
-- Logs, Metrics, Traces, Correlation IDs
+- Logs
+- Metrics
+- Traces
+- Correlation IDs
 
 FAILURE PATTERNS
-- Cascading failures, Thundering herd
+- Cascading failures
+- Thundering herd
+- Backpressure
 
 IDEMPOTENCY
-- API design, Payments
+- APIs
+- Payments
+- Messaging
 ```
 
 ### Status

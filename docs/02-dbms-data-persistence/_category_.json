@@ -4,7 +4,7 @@
   "collapsible": true,
   "collapsed": true,
   "link": {
-    "type": "doc",
-    "id": "dbms-data-persistence"
+    "type": "generated-index",
+    "description": "Complete guide to 2. DBMS & DATA PERSISTENCE"
   }
 }

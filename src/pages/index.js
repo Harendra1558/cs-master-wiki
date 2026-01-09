@@ -17,7 +17,7 @@ function Hero() {
                             <span className={styles.gradientText}>Harendra</span>
                         </h1>
                         <h2 className={styles.heroSubtitle}>
-                            Software Engineer | Backend & Full-Stack Developer
+                            Software Engineer
                         </h2>
                         <p className={styles.heroDescription}>
                             Specializing in building scalable backend systems with <strong>Java</strong>, <strong>Spring Boot</strong>, and <strong>Microservices</strong>.

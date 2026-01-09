@@ -10,19 +10,30 @@ title: Syllabus & Overview
 ```text
 IOC CONTAINER
 - BeanFactory vs ApplicationContext
-- Bean lifecycle, BeanPostProcessors
+- Bean lifecycle
+- BeanPostProcessors
 
 BEAN SCOPE & CONCURRENCY
-- Singleton beans, Stateless services
+- Singleton beans
+- Stateless services
 
 PROXY MECHANISM
-- JDK Proxy vs CGLIB
+- JDK Proxy
+- CGLIB
 
 TRANSACTIONS
-- @Transactional pitfalls, Self-invocation
+- @Transactional pitfalls
+- Self-invocation
+- Rollback rules
 
-ASYNC & SERVLET MODEL
-- @Async, Thread per request
+ASYNC
+- @Async
+- Thread pool exhaustion
+- Context loss
+
+SERVLET MODEL
+- Thread-per-request
+- Blocking vs non-blocking
 ```
 
 ### Status
