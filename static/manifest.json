@@ -1,0 +1,17 @@
+{
+    "name": "Harendra's Portfolio",
+    "short_name": "Harendra",
+    "description": "Harendra's Portfolio & CS Wiki",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#667eea",
+    "icons": [
+        {
+            "src": "img/logo.svg",
+            "sizes": "192x192 512x512",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ]
+}

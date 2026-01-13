@@ -2,8 +2,7 @@
 slug: jvm-memory-management-best-practices
 title: JVM Memory Management - Production Best Practices
 authors: [harendra]
-tags: [java, jvm, performance, memory-management]
-image: /img/blog/jvm-memory.jpg
+tags: [java, jvm, performance, memory]
 description: Deep dive into JVM memory management, garbage collection tuning, and avoiding common memory leaks in production Java applications.
 keywords: [java memory management, jvm tuning, garbage collection, memory leaks, java performance]
 ---
@@ -148,4 +147,4 @@ For a deeper dive into JVM internals, check out my [CS Fundamentals Wiki](/docs)
 
 ---
 
-**Have questions about JVM tuning?** Drop a comment below or connect with me on [LinkedIn](https://linkedin.com/in/yourprofile).
+**Have questions about JVM tuning?** Drop a comment below or connect with me on [LinkedIn](https://linkedin.com/in/harendra1558).

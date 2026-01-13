@@ -1,0 +1,173 @@
+﻿
+> cs-master-wiki@0.0.0 build
+> docusaurus build
+
+node.exe : [WARNING] The 
+`siteConfig.onBrokenMarkdownLinks` config 
+option is deprecated and will be removed in 
+Docusaurus v4.
+At C:\Program Files\nodejs\npm.ps1:29 char:3
++   & $NODE_EXE $NPM_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified:  
+   ([WARNING] The `... Docusaurus v4.:Strin  
+  g) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandE 
+   rror
+ 
+Please migrate and move this option to `siteC
+onfig.markdown.hooks.onBrokenMarkdownLinks` 
+instead.
+[INFO] [en] Creating an optimized production build...
+[WARNING] The 
+`siteConfig.onBrokenMarkdownLinks` config 
+option is deprecated and will be removed in 
+Docusaurus v4.
+Please migrate and move this option to `siteC
+onfig.markdown.hooks.onBrokenMarkdownLinks` 
+instead.
+[WARNING] Tags [java, jvm, performance, 
+memory-management] used in 
+2025-01-08-jvm-memory-management.md are not 
+defined in tags.yml
+[WARNING] Tags [database, postgresql, mysql, 
+performance, indexing] used in 
+2025-01-07-database-indexing-strategies.md 
+are not defined in tags.yml
+[90m[[90mwebpackbar[90m][39m [36mΓä╣[39m Compiling Client
+[90m[[90mwebpackbar[90m][39m [36mΓä╣[39m Compiling Server
+[90m[[90mwebpackbar[90m][39m [32mΓ£ö[39m Server: Compiled successfully in 4.76s
+[90m[[90mwebpackbar[90m][39m [32mΓ£ö[39m Client: Compiled successfully in 4.90s
+
+[ERROR] Error: Unable to build website for 
+locale en.
+    at tryToBuildLocale (C:\Users\Harsh\cs-ma
+ster-wiki\node_modules\@docusaurus\core\lib\c
+ommands\build\build.js:83:15)
+    at async C:\Users\Harsh\cs-master-wiki\no
+de_modules\@docusaurus\core\lib\commands\buil
+d\build.js:35:9
+    at async mapAsyncSequential (C:\Users\Har
+sh\cs-master-wiki\node_modules\@docusaurus\ut
+ils\lib\jsUtils.js:21:24)
+    at async Command.build (C:\Users\Harsh\cs
+-master-wiki\node_modules\@docusaurus\core\li
+b\commands\build\build.js:34:5)
+    at async Promise.all (index 0)
+    at async runCLI (C:\Users\Harsh\cs-master
+-wiki\node_modules\@docusaurus\core\lib\comma
+nds\cli.js:56:5)
+    at async file:///C:/Users/Harsh/cs-master
+-wiki/node_modules/@docusaurus/core/bin/docus
+aurus.mjs:44:3 {
+  [cause]: Error: You are trying to create 
+client-side redirections to invalid paths.
+  
+  These paths are redirected to but do not 
+exist:
+  - /docs/01-java-jvm-internals/01-intro
+  
+  Valid paths you can redirect to:
+  - /404.html
+  - /blog
+  - /blog/archive
+  - /blog/authors
+  - /blog/authors/harendra
+[INFO] Docusaurus version: 3.9.2
+Node version: v22.12.0
+  - /blog/database-indexing-strategies
+  - 
+/blog/jvm-memory-management-best-practices
+  - /blog/tags
+  - /blog/tags/database
+  - /blog/tags/indexing
+  - /blog/tags/java
+  - /blog/tags/jvm
+  - /blog/tags/memory-management
+  - /blog/tags/mysql
+  - /blog/tags/performance
+  - /blog/tags/postgresql
+  - /search
+  - /docs
+  - /docs/api-design/intro
+  - /docs/caching/intro
+  - /docs/category/1-java--jvm-internals
+  - /docs/category/10-message-queues
+  - 
+/docs/category/11-microservices-architecture
+  - /docs/category/12-api-design
+  - /docs/category/13-testing
+  - /docs/category/14-cicd--devops
+  - /docs/category/15-java-8-features
+  - /docs/category/2-dbms--data-persistence
+  - /docs/category/3-spring-boot-internals
+  - /docs/category/4-operating-systems
+  - /docs/category/5-computer-networks
+  - /docs/category/6-security--authentication
+  - /docs/category/7-cross-cutting-topics
+  - /docs/category/8-distributed-systems
+  - /docs/category/9-caching
+  - 
+/docs/category/part-a--low-level-design-lld
+  - 
+/docs/category/part-b--high-level-design-hld
+  - /docs/cicd-devops/intro
+  - /docs/computer-networks/intro
+  - /docs/cross-cutting-topics/intro
+  - /docs/dbms-data-persistence/indexes
+  - /docs/dbms-data-persistence/intro
+  - /docs/dbms-data-persistence/locking-query
+-exec
+  - /docs/dbms-data-persistence/pagination-po
+oling
+  - /docs/dbms-data-persistence/transactions
+  - /docs/distributed-systems/intro
+  - /docs/hld/intro
+  - /docs/java-features/intro
+  - 
+/docs/java-jvm-internals/garbage-collection
+  - /docs/java-jvm-internals/intro
+  - /docs/java-jvm-internals/jmm-concurrency
+  - /docs/java-jvm-internals/jvm-architecture
+  - /docs/lld/intro
+  - /docs/message-queues/intro
+  - /docs/microservices-architecture/intro
+  - /docs/operating-systems/intro
+  - /docs/security-authentication/intro
+  - /docs/spring-boot-internals/intro
+  - /docs/spring-boot-internals/ioc-container
+  - /docs/spring-boot-internals/spring-transa
+ctions
+  - /docs/testing/intro
+  - /
+  
+      at validateCollectedRedirects (C:\Users
+\Harsh\cs-master-wiki\node_modules\@docusauru
+s\plugin-client-redirects\lib\collectRedirect
+s.js:120:15)
+      at collectRedirects (C:\Users\Harsh\cs-
+master-wiki\node_modules\@docusaurus\plugin-c
+lient-redirects\lib\collectRedirects.js:39:5)
+      at Object.postBuild (C:\Users\Harsh\cs-
+master-wiki\node_modules\@docusaurus\plugin-c
+lient-redirects\lib\index.js:34:62)
+      at C:\Users\Harsh\cs-master-wiki\node_m
+odules\@docusaurus\core\lib\commands\build\bu
+ildLocale.js:106:22
+      at Array.map (<anonymous>)
+      at executePluginsPostBuild (C:\Users\Ha
+rsh\cs-master-wiki\node_modules\@docusaurus\c
+ore\lib\commands\build\buildLocale.js:102:31)
+      at C:\Users\Harsh\cs-master-wiki\node_m
+odules\@docusaurus\core\lib\commands\build\bu
+ildLocale.js:92:58
+      at Object.async (C:\Users\Harsh\cs-mast
+er-wiki\node_modules\@docusaurus\logger\lib\p
+erfLogger.js:42:47)
+      at buildLocale (C:\Users\Harsh\cs-maste
+r-wiki\node_modules\@docusaurus\core\lib\comm
+ands\build\buildLocale.js:92:31)
+      at async runBuildLocaleTask (C:\Users\H
+arsh\cs-master-wiki\node_modules\@docusaurus\
+core\lib\commands\build\build.js:98:5)
+}

@@ -1,19 +1,57 @@
-facebook:
-  label: Facebook
-  permalink: /facebook
-  description: Facebook tag description
+# Blog Tags Configuration
+# Define all tags used in blog posts here
 
-hello:
-  label: Hello
-  permalink: /hello
-  description: Hello tag description
+database:
+  label: Database
+  permalink: /database
+  description: Database related content and tutorials
 
-docusaurus:
-  label: Docusaurus
-  permalink: /docusaurus
-  description: Docusaurus tag description
+postgresql:
+  label: PostgreSQL
+  permalink: /postgresql
+  description: PostgreSQL tips, optimization, and best practices
 
-hola:
-  label: Hola
-  permalink: /hola
-  description: Hola tag description
+mysql:
+  label: MySQL
+  permalink: /mysql
+  description: MySQL optimization and performance guides
+
+performance:
+  label: Performance
+  permalink: /performance
+  description: Performance optimization techniques and benchmarks
+
+indexing:
+  label: Indexing
+  permalink: /indexing
+  description: Database indexing strategies and best practices
+
+java:
+  label: Java
+  permalink: /java
+  description: Java programming language content
+
+jvm:
+  label: JVM
+  permalink: /jvm
+  description: JVM internals and memory management
+
+spring-boot:
+  label: Spring Boot
+  permalink: /spring-boot
+  description: Spring Boot framework tutorials and patterns
+
+microservices:
+  label: Microservices
+  permalink: /microservices
+  description: Microservices architecture and patterns
+
+system-design:
+  label: System Design
+  permalink: /system-design
+  description: System design concepts and interview preparation
+
+memory:
+  label: Memory
+  permalink: /memory
+  description: Memory management and optimization

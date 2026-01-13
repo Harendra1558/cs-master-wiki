@@ -84,6 +84,22 @@
 }
 
 .gradientText {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Light mode - gradient text visible on light backgrounds */
+:global([data-theme='light']) .gradientText {
+  background: linear-gradient(135deg, #4a5fd6 0%, #6b3e8e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Dark mode - lighter gradient for dark backgrounds */
+:global([data-theme='dark']) .gradientText {
   background: linear-gradient(120deg, #fff 0%, #e0c3fc 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -140,6 +156,7 @@
   border-radius: 50%;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
+  color: white;
 }
 
 .socialLinks a:hover {
@@ -147,9 +164,14 @@
   transform: translateY(-3px);
 }
 
-.socialLinks img {
+.socialLinks svg {
   width: 20px;
   height: 20px;
+  fill: white;
+}
+
+.socialIcon {
+  color: white;
 }
 
 /* Hero Avatar */
@@ -468,6 +490,15 @@
   font-size: 0.9rem;
   font-weight: 500;
   transition: transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.skillIcon {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) invert(1);
 }
 
 .skillTag:hover {
@@ -683,4 +714,174 @@
   .heroButton {
     width: 100%;
   }
+}
+
+/* ========================================
+   LIGHT MODE ENHANCEMENTS
+   ======================================== */
+
+/* Light Mode Section Backgrounds */
+:global([data-theme='light']) .section {
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+:global([data-theme='light']) .experienceSection {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+}
+
+/* Light Mode Section Titles */
+:global([data-theme='light']) .sectionTitle {
+  color: #1e293b;
+}
+
+/* Light Mode About Section */
+:global([data-theme='light']) .aboutText {
+  color: #334155;
+}
+
+:global([data-theme='light']) .aboutText p {
+  color: #475569;
+}
+
+:global([data-theme='light']) .aboutText strong {
+  color: #1e293b;
+}
+
+/* Light Mode Stats Cards */
+:global([data-theme='light']) .statCard {
+  background: linear-gradient(135deg, #5a6fd6 0%, #7b4b9e 100%);
+  box-shadow: 0 8px 30px rgba(90, 111, 214, 0.3);
+}
+
+/* Light Mode Timeline */
+:global([data-theme='light']) .timelineContent {
+  background: #ffffff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+}
+
+:global([data-theme='light']) .timelineHeader h3 {
+  color: #5a6fd6;
+}
+
+:global([data-theme='light']) .company {
+  color: #1e293b;
+}
+
+:global([data-theme='light']) .duration {
+  color: #64748b;
+}
+
+:global([data-theme='light']) .timelineList li {
+  color: #475569;
+}
+
+:global([data-theme='light']) .timelineList li strong {
+  color: #1e293b;
+}
+
+/* Light Mode Skills Section */
+:global([data-theme='light']) .skillCategory {
+  background: #ffffff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+}
+
+:global([data-theme='light']) .skillCategory h3 {
+  color: #5a6fd6;
+}
+
+:global([data-theme='light']) .skillTag {
+  background: linear-gradient(135deg, #5a6fd6 0%, #7b4b9e 100%);
+  box-shadow: 0 2px 8px rgba(90, 111, 214, 0.3);
+}
+
+/* Light Mode Project Cards */
+:global([data-theme='light']) .projectCard {
+  background: #ffffff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+}
+
+:global([data-theme='light']) .projectCard:hover {
+  box-shadow: 0 12px 40px rgba(90, 111, 214, 0.25);
+  border-color: #5a6fd6;
+}
+
+:global([data-theme='light']) .projectHeader h3 {
+  color: #5a6fd6;
+}
+
+:global([data-theme='light']) .projectDescription {
+  color: #475569;
+}
+
+:global([data-theme='light']) .techBadge {
+  background: linear-gradient(135deg, rgba(90, 111, 214, 0.15) 0%, rgba(123, 75, 158, 0.15) 100%);
+  color: #5a6fd6;
+  font-weight: 600;
+}
+
+:global([data-theme='light']) .projectLink {
+  color: #5a6fd6;
+}
+
+:global([data-theme='light']) .projectLink:hover {
+  color: #4a5cc4;
+}
+
+/* Light Mode Contact Section - Override gradient for visibility */
+:global([data-theme='light']) .contactSection {
+  background: linear-gradient(135deg, #5a6fd6 0%, #7b4b9e 100%);
+}
+
+:global([data-theme='light']) .contactSection .sectionTitle .gradientText {
+  background: linear-gradient(120deg, #fff 0%, #e0c3fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Enhanced Visual Elements */
+:global([data-theme='light']) .avatarContainer::after {
+  content: '';
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  right: -10%;
+  bottom: -10%;
+  background: radial-gradient(circle, rgba(90, 111, 214, 0.1) 0%, transparent 70%);
+  z-index: -1;
+}
+
+/* Dark Mode Enhancements */
+:global([data-theme='dark']) .section {
+  background: #0d1117;
+}
+
+:global([data-theme='dark']) .experienceSection {
+  background: #161b22;
+}
+
+:global([data-theme='dark']) .skillCategory,
+:global([data-theme='dark']) .projectCard,
+:global([data-theme='dark']) .timelineContent {
+  background: #1c2128;
+  border-color: #30363d;
+}
+
+:global([data-theme='dark']) .statCard {
+  box-shadow: 0 8px 30px rgba(102, 126, 234, 0.25);
+}
+
+/* Smooth transitions for theme switching */
+.section,
+.sectionTitle,
+.aboutText,
+.statCard,
+.timelineContent,
+.skillCategory,
+.projectCard,
+.contactSection {
+  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }

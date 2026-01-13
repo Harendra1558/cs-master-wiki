@@ -3,7 +3,6 @@ slug: database-indexing-strategies
 title: Database Indexing Strategies - When and How to Index
 authors: [harendra]
 tags: [database, postgresql, mysql, performance, indexing]
-image: /img/blog/database-indexing.jpg
 description: Learn when to create database indexes, composite index column ordering, and how to avoid common indexing pitfalls for optimal query performance.
 keywords: [database indexing, composite index, postgresql performance, mysql optimization, query tuning]
 ---
@@ -250,7 +249,7 @@ Effective indexing requires understanding:
 
 **Remember:** Indexes are not free. Add them strategically based on actual query patterns, not speculation.
 
-Want to dive deeper? Check out my comprehensive [DBMS guide](/docs/dbms-guide) in the CS Fundamentals Wiki.
+Want to dive deeper? Check out my comprehensive [DBMS guide](/docs/category/2-dbms--data-persistence) in the CS Fundamentals Wiki.
 
 ---
 

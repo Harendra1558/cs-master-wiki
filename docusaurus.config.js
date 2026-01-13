@@ -8,7 +8,7 @@ const config = {
   url: "https://harendra-dev.vercel.app",
   baseUrl: "/",
   onBrokenLinks: "warn",
-  onBrokenMarkdownLinks: "warn",
+  // onBrokenMarkdownLinks: "warn", // Deprecated, using default behavior
   favicon: "img/logo.svg",
 
   // GitHub pages deployment config
@@ -40,6 +40,80 @@ const config = {
       }),
     ],
   ],
+
+  // Plugins for redirects and additional functionality
+  plugins: [
+    [
+      "@docusaurus/plugin-client-redirects",
+      {
+        redirects: [
+          // Redirect /docs/java-jvm-internals to the correct category page
+          {
+            from: "/docs/java-jvm-internals",
+            to: "/docs/category/1-java--jvm-internals",
+          },
+          // Additional common redirect patterns
+          {
+            from: "/docs/dbms-data-persistence",
+            to: "/docs/category/2-dbms--data-persistence",
+          },
+          {
+            from: "/docs/spring-boot-internals",
+            to: "/docs/category/3-spring-boot-internals",
+          },
+        ],
+      },
+    ],
+    [
+      '@docusaurus/plugin-pwa',
+      {
+        debug: true,
+        offlineModeActivationStrategies: [
+          'appInstalled',
+          'standalone',
+          'queryString',
+        ],
+        pwaHead: [
+          {
+            tagName: 'link',
+            attributes: {
+              rel: 'icon',
+              href: '/img/logo.svg',
+            },
+          },
+          {
+            tagName: 'link',
+            attributes: {
+              rel: 'manifest',
+              href: '/manifest.json', // Docusaurus generates this
+            },
+          },
+          {
+            tagName: 'meta',
+            attributes: {
+              name: 'theme-color',
+              content: '#667eea',
+            },
+          },
+          {
+            tagName: 'meta',
+            attributes: {
+              name: 'apple-mobile-web-app-capable',
+              content: 'yes',
+            },
+          },
+          {
+            tagName: 'meta',
+            attributes: {
+              name: 'apple-mobile-web-app-status-bar-style',
+              content: '#000',
+            },
+          },
+        ],
+      },
+    ],
+  ],
+
 
   presets: [
     [
@@ -164,10 +238,6 @@ const config = {
                 label: "LinkedIn",
                 href: "https://www.linkedin.com/in/harendra1558/",
               },
-              {
-                label: "Twitter",
-                href: "https://twitter.com/yourhandle",
-              },
             ],
           },
           {
@@ -175,7 +245,7 @@ const config = {
             items: [
               {
                 label: "Resume",
-                href: "#",
+                href: "https://drive.google.com/file/d/1aFKAM-ZU8xbPwqrADwt0FwaFVfOf_zXq/view?usp=drive_link",
               },
               {
                 label: "Contact",
@@ -184,7 +254,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Harendra's Portfolio. Built with Docusaurus.`,
+        copyright: `© ${new Date().getFullYear()} Harendra. All rights reserved.`,
       },
 
       // Prism theme for code blocks
