@@ -2,9 +2,9 @@
   "label": "3. SPRING BOOT INTERNALS",
   "position": 3,
   "collapsible": true,
-  "collapsed": true,
+  "collapsed": false,
   "link": {
     "type": "generated-index",
-    "description": "Complete guide to 3. SPRING BOOT INTERNALS"
+    "description": "Master Spring Boot internals: IoC Container, Bean Lifecycle, Proxies, Transactions, Async, and Servlet Model. Interview-focused documentation for 2-4 YOE Java developers."
   }
 }

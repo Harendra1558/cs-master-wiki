@@ -2,7 +2,7 @@
 title: 2. Spring IoC Container Deep Dive
 sidebar_position: 2
 description: Master the Spring IoC container, Bean lifecycle, and dependency injection for interviews.
-keywords: [spring ioc, dependency injection, beanfactory, applicationcontext, bean lifecycle]
+keywords: [spring ioc, dependency injection, beanfactory, applicationcontext, bean lifecycle, beanpostprocessor]
 ---
 
 # Spring IoC Container Deep Dive
@@ -11,210 +11,335 @@ keywords: [spring ioc, dependency injection, beanfactory, applicationcontext, be
 "Explain the difference between BeanFactory and ApplicationContext" is asked in **90%+ of Spring interviews**. Understanding IoC is fundamental to Spring mastery.
 :::
 
-## 1. Understanding Inversion of Control (IoC)
+---
 
-### What is IoC?
+## 1. What is IoC (Inversion of Control)?
 
-**Simple Explanation:** Instead of your code creating objects, Spring creates them for you and "injects" them where needed.
+### Simple Explanation
+
+**IoC means the framework controls object creation, not you.** Instead of your code saying "I need a PaymentService, let me create one," Spring says "Here's a PaymentService I created and configured for you."
+
+### Why Does Spring Need This?
+
+| Problem Without IoC | Solution With IoC |
+|---------------------|-------------------|
+| You create dependencies manually | Spring creates and wires them |
+| Hard to swap implementations | Just change configuration |
+| Testing requires real objects | Inject mocks easily |
+| Lifecycle management is manual | Spring handles lifecycle |
+| Tight coupling between classes | Loose coupling via interfaces |
+
+### How It Works Internally
+
+```text
+APPLICATION STARTUP
+───────────────────────────────────────────────────────
+1. Spring scans for @Component, @Service, @Repository, @Controller
+   ↓
+2. Creates BeanDefinition for each (metadata about the bean)
+   ↓
+3. Resolves dependencies between beans
+   ↓
+4. Creates beans in correct order (dependencies first)
+   ↓
+5. Injects dependencies via constructor/setter/field
+   ↓
+6. Runs lifecycle callbacks (@PostConstruct, etc.)
+   ↓
+7. Beans ready to use!
+```
+
+---
+
+## 2. Dependency Injection Types
+
+### Constructor Injection (✅ Recommended)
 
 ```java
-// ❌ WITHOUT IoC - Tight coupling
+@Service
 public class OrderService {
-    private PaymentService paymentService = new PaymentService(); // YOU create it
-    private EmailService emailService = new EmailService();       // YOU create it
-}
-
-// ✅ WITH IoC - Loose coupling
-public class OrderService {
-    private final PaymentService paymentService;  // Spring INJECTS it
-    private final EmailService emailService;      // Spring INJECTS it
     
-    public OrderService(PaymentService paymentService, EmailService emailService) {
+    private final PaymentService paymentService;  // Immutable
+    private final InventoryService inventoryService;
+    
+    // All dependencies in constructor - obvious what's required
+    public OrderService(PaymentService paymentService, 
+                        InventoryService inventoryService) {
         this.paymentService = paymentService;
-        this.emailService = emailService;
+        this.inventoryService = inventoryService;
     }
 }
 ```
 
-### Interview Question: Why is IoC Important?
+**Why constructor injection is preferred:**
+- Dependencies are **final** (immutable)
+- Class cannot be created without dependencies (fail-fast)
+- Easy to write unit tests (just pass mocks in constructor)
+- Makes dependencies **explicit**
 
-| Without IoC | With IoC |
-|-------------|----------|
-| Hard to test (can't mock dependencies) | Easy to test (inject mocks) |
-| Tight coupling | Loose coupling |
-| Hard to swap implementations | Easy to swap (just change config) |
-| You manage object lifecycle | Spring manages lifecycle |
+### Setter Injection
+
+```java
+@Service
+public class OrderService {
+    
+    private PaymentService paymentService;
+    
+    @Autowired
+    public void setPaymentService(PaymentService paymentService) {
+        this.paymentService = paymentService;
+    }
+}
+```
+
+**Use when:** Dependency is **optional** or needs to be changed at runtime.
+
+### Field Injection (⚠️ Avoid in Production)
+
+```java
+@Service
+public class OrderService {
+    
+    @Autowired
+    private PaymentService paymentService;  // ❌ Hard to test!
+}
+```
+
+**Problems:**
+- Cannot make fields final
+- Reflection needed to set in tests
+- Hides dependencies from constructor
+- Makes class harder to reason about
 
 ---
 
-## 2. BeanFactory vs ApplicationContext
+## 3. BeanFactory vs ApplicationContext
 
-### BeanFactory (The Basic Container)
-- **Lazy initialization** - Beans created when first requested
-- Minimal features
-- Lower memory footprint
-- Rarely used directly in modern apps
-
-### ApplicationContext (The Feature-Rich Container)
-- **Eager initialization** - Singleton beans created at startup
-- Extends BeanFactory with extra features
-- Most commonly used in real applications
+### BeanFactory (Basic Container)
 
 ```java
-// BeanFactory - Manual loading
+// Old way - rarely used now
 BeanFactory factory = new XmlBeanFactory(new ClassPathResource("beans.xml"));
-MyBean bean = factory.getBean(MyBean.class); // Created NOW
-
-// ApplicationContext - Recommended
-ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-MyBean bean = context.getBean(MyBean.class); // Already created at startup
+MyBean bean = factory.getBean(MyBean.class);  // Bean created NOW (lazy)
 ```
+
+**Characteristics:**
+- **Lazy initialization** - beans created when first requested
+- Minimal features
+- Lower memory footprint
+- Used internally by Spring
+
+### ApplicationContext (Feature-Rich Container)
+
+```java
+// Modern way
+ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+MyBean bean = context.getBean(MyBean.class);  // Already created at startup
+```
+
+**Characteristics:**
+- **Eager initialization** - singleton beans created at startup
+- Event publishing mechanism
+- Internationalization (i18n) support
+- Environment and property resolution
+- Automatic BeanPostProcessor registration
+
+### Interview Comparison
+
+| Feature | BeanFactory | ApplicationContext |
+|---------|-------------|-------------------|
+| Initialization | Lazy | Eager (singletons) |
+| Event publishing | ❌ | ✅ |
+| i18n support | ❌ | ✅ |
+| BeanPostProcessor auto-registration | ❌ | ✅ |
+| AOP integration | Manual | Automatic |
+| Use in production | Rarely | Always |
 
 ### Interview Answer Template
 
-> "ApplicationContext extends BeanFactory and adds enterprise features like internationalization (i18n), event publishing, and annotation-based configuration. It also eagerly initializes singleton beans at startup, which helps fail-fast if there are configuration errors."
+> "ApplicationContext extends BeanFactory and adds enterprise features like event publishing, internationalization, and annotation configuration. Most importantly, it eagerly initializes singleton beans at startup, which helps fail-fast if there are configuration errors like missing dependencies."
 
 ---
 
-## 3. Bean Lifecycle (Critical for Interviews!)
+## 4. Bean Creation Flow (Internal Process)
 
-```mermaid
-graph TD
-    A[Bean Definition Loaded] --> B[Instantiation]
-    B --> C[Populate Properties - Dependency Injection]
-    C --> D[BeanNameAware.setBeanName]
-    D --> E[BeanFactoryAware.setBeanFactory]
-    E --> F[BeanPostProcessor.postProcessBeforeInitialization]
-    F --> G[@PostConstruct]
-    G --> H[InitializingBean.afterPropertiesSet]
-    H --> I[Custom init-method]
-    I --> J[BeanPostProcessor.postProcessAfterInitialization]
-    J --> K[Bean Ready to Use]
-    K --> L[@PreDestroy]
-    L --> M[DisposableBean.destroy]
-    M --> N[Custom destroy-method]
+### Step-by-Step Flow
+
+```text
+┌─────────────────────────────────────────────────────────────┐
+│                    BEAN CREATION FLOW                       │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  1. Load Bean Definitions                                   │
+│     ├── Scan @Component classes                             │
+│     ├── Read @Bean methods in @Configuration                │
+│     └── Store as BeanDefinition objects                     │
+│                                                             │
+│  2. BeanFactory Post-Processing                             │
+│     └── Modify bean definitions (PropertyPlaceholder, etc.) │
+│                                                             │
+│  3. Instantiate Beans (in dependency order)                 │
+│     ├── Use constructor reflection                          │
+│     └── Resolve constructor arguments (@Autowired)          │
+│                                                             │
+│  4. Populate Properties                                     │
+│     ├── Field injection (@Autowired fields)                 │
+│     └── Setter injection (@Autowired setters)               │
+│                                                             │
+│  5. Bean Post-Processing (BEFORE init)                      │
+│     └── BeanPostProcessor.postProcessBeforeInitialization   │
+│                                                             │
+│  6. Initialization                                          │
+│     ├── @PostConstruct method                               │
+│     ├── InitializingBean.afterPropertiesSet()               │
+│     └── Custom init-method                                  │
+│                                                             │
+│  7. Bean Post-Processing (AFTER init)                       │
+│     └── BeanPostProcessor.postProcessAfterInitialization    │
+│     └── THIS IS WHERE PROXIES ARE CREATED!                  │
+│                                                             │
+│  8. Bean Ready for Use                                      │
+│                                                             │
+│  9. Destruction (on container shutdown)                     │
+│     ├── @PreDestroy method                                  │
+│     ├── DisposableBean.destroy()                            │
+│     └── Custom destroy-method                               │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-### Lifecycle Callbacks in Code
+---
+
+## 5. Bean Lifecycle Callbacks
+
+### All Callback Methods
 
 ```java
 @Component
-public class MyBean implements InitializingBean, DisposableBean {
+public class DataSourceBean implements InitializingBean, DisposableBean, 
+                                       BeanNameAware, BeanFactoryAware {
     
-    // 1. Constructor called first
-    public MyBean() {
-        System.out.println("1. Constructor");
+    private String beanName;
+    private BeanFactory beanFactory;
+    
+    // 1. Constructor
+    public DataSourceBean() {
+        System.out.println("1. Constructor called");
     }
     
-    // 2. Dependencies injected
-    @Autowired
-    public void setDependency(SomeDependency dep) {
-        System.out.println("2. Dependencies injected");
+    // 2. Dependency injection happens here
+    
+    // 3. Awareness interfaces (rarely needed)
+    @Override
+    public void setBeanName(String name) {
+        System.out.println("3a. BeanNameAware - name: " + name);
+        this.beanName = name;
     }
     
-    // 3. @PostConstruct - MOST COMMONLY USED
+    @Override
+    public void setBeanFactory(BeanFactory factory) {
+        System.out.println("3b. BeanFactoryAware");
+        this.beanFactory = factory;
+    }
+    
+    // 4. BeanPostProcessor.postProcessBeforeInitialization (external)
+    
+    // 5. @PostConstruct (MOST COMMONLY USED)
     @PostConstruct
     public void init() {
-        System.out.println("3. @PostConstruct - initialization logic here");
+        System.out.println("5. @PostConstruct - initialization logic");
     }
     
-    // 4. InitializingBean interface (less preferred)
+    // 6. InitializingBean interface
     @Override
     public void afterPropertiesSet() {
-        System.out.println("4. afterPropertiesSet");
+        System.out.println("6. afterPropertiesSet()");
     }
     
-    // 5. @PreDestroy - cleanup
+    // 7. BeanPostProcessor.postProcessAfterInitialization (external)
+    // Proxies created here!
+    
+    // 8. Bean is ready
+    
+    // 9. @PreDestroy (cleanup)
     @PreDestroy
     public void cleanup() {
-        System.out.println("5. @PreDestroy - cleanup resources");
+        System.out.println("9. @PreDestroy - cleanup resources");
     }
     
-    // 6. DisposableBean interface
+    // 10. DisposableBean interface
     @Override
     public void destroy() {
-        System.out.println("6. destroy");
+        System.out.println("10. destroy()");
     }
 }
 ```
 
-### Interview Question: When would you use @PostConstruct?
+### Output Order
 
-**Common use cases:**
-- Loading cache data at startup
-- Validating configuration
-- Establishing database connections
-- Starting background threads
+```text
+1. Constructor called
+3a. BeanNameAware - name: dataSourceBean
+3b. BeanFactoryAware
+5. @PostConstruct - initialization logic
+6. afterPropertiesSet()
+
+... application runs ...
+
+9. @PreDestroy - cleanup resources
+10. destroy()
+```
+
+---
+
+## 6. @PostConstruct vs InitializingBean
+
+### When to Use Each
+
+| Aspect | @PostConstruct | InitializingBean |
+|--------|----------------|------------------|
+| Type | Annotation | Interface |
+| Coupling | Low (JSR-250) | High (Spring) |
+| Multiple methods | Yes | No (one method) |
+| Recommended | ✅ Yes | ⚠️ Only if needed |
+| Use case | Normal init | Framework code |
+
+### Common @PostConstruct Use Cases
 
 ```java
-@Component
-public class CacheLoader {
-    @Autowired
-    private ProductRepository repository;
+@Service
+public class CacheService {
     
-    private Map<String, Product> cache;
+    @Autowired
+    private CacheRepository repository;
+    
+    private Map<String, Object> cache;
     
     @PostConstruct
     public void loadCache() {
-        // Dependencies are already injected here!
+        // ✅ Dependencies are already injected here!
+        // Safe to use repository
         this.cache = repository.findAll()
             .stream()
-            .collect(Collectors.toMap(Product::getId, p -> p));
+            .collect(Collectors.toMap(Item::getKey, Item::getValue));
+        
+        log.info("Loaded {} items into cache", cache.size());
     }
 }
 ```
-
----
-
-## 4. BeanPostProcessor (Advanced)
-
-BeanPostProcessors are hooks that let you **modify beans before and after initialization**.
-
-### Real-World Example: Custom Annotation Processing
 
 ```java
 @Component
-public class LoggingBeanPostProcessor implements BeanPostProcessor {
+public class HealthChecker {
     
-    @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) {
-        // Called BEFORE @PostConstruct
-        System.out.println("Before init: " + beanName);
-        return bean;
-    }
+    @Value("${external.service.url}")
+    private String serviceUrl;
     
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) {
-        // Called AFTER @PostConstruct
-        // This is where Spring creates PROXIES (for @Transactional, @Async, etc.)
-        return bean;
-    }
-}
-```
-
-### Interview Insight: How @Transactional Works
-
-Spring uses a BeanPostProcessor to wrap your beans in a PROXY:
-
-```java
-// Your code
-@Service
-public class PaymentService {
-    @Transactional
-    public void processPayment() { ... }
-}
-
-// What Spring actually creates (simplified)
-public class PaymentService$$EnhancerBySpringCGLIB extends PaymentService {
-    @Override
-    public void processPayment() {
-        beginTransaction();
-        try {
-            super.processPayment();
-            commitTransaction();
-        } catch (Exception e) {
-            rollbackTransaction();
-            throw e;
+    @PostConstruct
+    public void validateConfiguration() {
+        // Fail fast if misconfigured
+        if (serviceUrl == null || serviceUrl.isEmpty()) {
+            throw new IllegalStateException("external.service.url must be configured!");
         }
     }
 }
@@ -222,138 +347,403 @@ public class PaymentService$$EnhancerBySpringCGLIB extends PaymentService {
 
 ---
 
-## 5. Bean Scopes
+## 7. BeanPostProcessor (Advanced)
 
-| Scope | Description | When to Use |
-|-------|-------------|-------------|
-| `singleton` (default) | One instance per Spring container | Stateless services |
-| `prototype` | New instance every time requested | Stateful beans |
-| `request` | One instance per HTTP request | Request-specific data |
-| `session` | One instance per HTTP session | User session data |
+### What is it?
 
-### Singleton Scope (Default)
+A **hook** that allows you to modify bean instances before and after initialization. Spring uses this internally to create proxies, process annotations, etc.
+
+### How It Works
 
 ```java
-@Service  // Singleton by default
-public class UserService {
-    // ⚠️ DANGER: Don't store state in singleton beans!
-    private User currentUser;  // ❌ WRONG - Shared across all requests!
+@Component
+public class TimingBeanPostProcessor implements BeanPostProcessor {
     
-    // ✅ Correct - Stateless operation
-    public User findUser(Long id) {
-        return userRepository.findById(id);
+    private Map<String, Long> startTimes = new ConcurrentHashMap<>();
+    
+    @Override
+    public Object postProcessBeforeInitialization(Object bean, String beanName) {
+        // Called BEFORE @PostConstruct
+        startTimes.put(beanName, System.currentTimeMillis());
+        return bean;  // Must return the bean (or a wrapper)
+    }
+    
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) {
+        // Called AFTER @PostConstruct
+        // This is where Spring creates PROXIES!
+        
+        Long startTime = startTimes.remove(beanName);
+        if (startTime != null) {
+            long duration = System.currentTimeMillis() - startTime;
+            if (duration > 100) {
+                log.warn("Slow bean initialization: {} took {}ms", beanName, duration);
+            }
+        }
+        
+        return bean;  // Return bean or a PROXY wrapping it
     }
 }
 ```
 
-### Prototype Scope
+### Real-World Examples of BeanPostProcessors
+
+```text
+Spring's Built-in BeanPostProcessors:
+──────────────────────────────────────────────────────
+AutowiredAnnotationBeanPostProcessor
+  → Processes @Autowired, @Value
+
+CommonAnnotationBeanPostProcessor
+  → Processes @PostConstruct, @PreDestroy, @Resource
+
+AsyncAnnotationBeanPostProcessor
+  → Creates proxies for @Async methods
+
+TransactionAttributeSourcePointcut
+  → Creates proxies for @Transactional
+```
+
+### Interview Question: How Does @Transactional Work?
 
 ```java
-@Component
-@Scope("prototype")
-public class ShoppingCart {
-    private List<Item> items = new ArrayList<>();
-    
-    public void addItem(Item item) {
-        items.add(item);
-    }
+// Your code
+@Service
+public class PaymentService {
+    @Transactional
+    public void process() { ... }
 }
 
-// Each call gets a NEW instance
-ShoppingCart cart1 = context.getBean(ShoppingCart.class);
-ShoppingCart cart2 = context.getBean(ShoppingCart.class);
-// cart1 != cart2
+// What Spring creates (simplified)
+public class PaymentService$$EnhancerBySpringCGLIB extends PaymentService {
+    private final TransactionInterceptor txInterceptor;
+    
+    @Override
+    public void process() {
+        TransactionStatus status = txInterceptor.createTransactionIfNecessary();
+        try {
+            super.process();  // Your actual code
+            txInterceptor.commitTransactionAfterReturning(status);
+        } catch (Throwable ex) {
+            txInterceptor.completeTransactionAfterThrowing(status, ex);
+            throw ex;
+        }
+    }
+}
 ```
 
 ---
 
-## 6. Common Interview Questions
+## 8. Code Examples
 
-### Q1: What happens if you inject a prototype bean into a singleton?
-
-**Problem:** The prototype is injected once and never changes!
+### ✅ Correct: Constructor Injection with Immutability
 
 ```java
 @Service
-public class OrderService {  // Singleton
+public class UserService {
+    
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
+    
+    // All dependencies explicit, immutable
+    public UserService(UserRepository userRepository,
+                       PasswordEncoder passwordEncoder,
+                       EmailService emailService) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
+    }
+    
+    public User createUser(CreateUserRequest request) {
+        String encoded = passwordEncoder.encode(request.getPassword());
+        User user = new User(request.getEmail(), encoded);
+        
+        User saved = userRepository.save(user);
+        emailService.sendWelcome(saved);
+        
+        return saved;
+    }
+}
+```
+
+### ❌ Wrong: Field Injection with Hidden Dependencies
+
+```java
+@Service
+public class BadUserService {
+    
     @Autowired
-    private ShoppingCart cart;  // Prototype - but SAME instance always!
+    private UserRepository userRepository;  // Hidden
+    
+    @Autowired
+    private PasswordEncoder encoder;  // Hidden
+    
+    @Autowired
+    private EmailService emailService;  // Hidden
+    
+    @Autowired
+    private AuditService auditService;  // Hidden
+    
+    // How many dependencies? Have to read the whole class!
+    // Testing requires reflection or Spring context
+}
+```
+
+### @PostConstruct for Initialization
+
+```java
+@Component
+public class ConfigurationValidator {
+    
+    @Value("${app.api.key}")
+    private String apiKey;
+    
+    @Value("${app.api.url}")
+    private String apiUrl;
+    
+    @PostConstruct
+    public void validate() {
+        List<String> errors = new ArrayList<>();
+        
+        if (apiKey == null || apiKey.length() < 32) {
+            errors.add("app.api.key must be at least 32 characters");
+        }
+        
+        if (apiUrl == null || !apiUrl.startsWith("https://")) {
+            errors.add("app.api.url must start with https://");
+        }
+        
+        if (!errors.isEmpty()) {
+            throw new IllegalStateException(
+                "Configuration errors:\n" + String.join("\n", errors)
+            );
+        }
+        
+        log.info("Configuration validated successfully");
+    }
+}
+```
+
+---
+
+## 9. Common Interview Questions
+
+### Q1: What's the difference between @Component, @Service, @Repository?
+
+**Answer:**
+> "Functionally identical - all register beans. The difference is semantic:
+> - `@Component`: Generic bean
+> - `@Service`: Business logic layer
+> - `@Repository`: Data access layer (also enables exception translation)
+> - `@Controller`: Web layer
+> 
+> Using the right annotation improves code readability and allows layer-specific processing."
+
+### Q2: What happens if there are multiple beans of the same type?
+
+**Answer:**
+> "Spring throws `NoUniqueBeanDefinitionException`. Solutions:
+> - `@Primary` on the preferred bean
+> - `@Qualifier("beanName")` at injection point
+> - Inject `List<Interface>` to get all implementations
+> - Use `@ConditionalOnProperty` to conditionally create beans"
+
+```java
+@Configuration
+public class DataSourceConfig {
+    
+    @Bean
+    @Primary  // Default choice
+    public DataSource primaryDataSource() { ... }
+    
+    @Bean("readReplica")
+    public DataSource readReplicaDataSource() { ... }
+}
+
+@Service
+public class UserService {
+    
+    public UserService(
+            DataSource primary,                      // Gets @Primary
+            @Qualifier("readReplica") DataSource replica) {  // Gets specific
+        // ...
+    }
+}
+```
+
+### Q3: Explain circular dependency and how to resolve it.
+
+**Answer:**
+> "When Bean A depends on Bean B, and Bean B depends on Bean A. Spring can't decide which to create first."
+
+```java
+// ❌ CIRCULAR DEPENDENCY
+@Service
+public class OrderService {
+    @Autowired private PaymentService paymentService;  // Needs PaymentService
+}
+
+@Service
+public class PaymentService {
+    @Autowired private OrderService orderService;  // Needs OrderService
 }
 ```
 
 **Solutions:**
-
 ```java
-// Solution 1: ObjectFactory
+// Solution 1: @Lazy
 @Service
 public class OrderService {
-    @Autowired
-    private ObjectFactory<ShoppingCart> cartFactory;
+    @Autowired @Lazy private PaymentService paymentService;
+}
+
+// Solution 2: Setter injection (breaks the cycle)
+@Service
+public class PaymentService {
+    private OrderService orderService;
     
-    public void process() {
-        ShoppingCart cart = cartFactory.getObject();  // New instance each time
+    @Autowired
+    public void setOrderService(OrderService orderService) {
+        this.orderService = orderService;
     }
 }
 
-// Solution 2: @Lookup method
+// Solution 3: Refactor (BEST) - extract shared logic to third service
+```
+
+### Q4: What's the difference between @PostConstruct and constructor?
+
+**Answer:**
+> "In the constructor, dependencies haven't been injected yet (for field/setter injection). `@PostConstruct` runs after all injection is complete, so you can safely use dependencies there."
+
+```java
 @Service
-public abstract class OrderService {
-    @Lookup
-    public abstract ShoppingCart getCart();  // Spring overrides this
+public class MyService {
+    
+    @Autowired
+    private Repository repository;  // NULL in constructor!
+    
+    public MyService() {
+        // repository is NULL here!
+        // repository.findAll();  // ❌ NullPointerException
+    }
+    
+    @PostConstruct
+    public void init() {
+        // repository is injected here
+        repository.findAll();  // ✅ Works
+    }
 }
 ```
 
-### Q2: How do you choose between constructor and setter injection?
+---
 
-| Constructor Injection ✅ | Setter Injection |
-|-------------------------|------------------|
-| Required dependencies | Optional dependencies |
-| Immutable (final fields) | Mutable |
-| Fail-fast (fails at startup) | May fail at runtime |
-| Easier to test | Harder to test |
+## 10. Traps & Pitfalls
 
-**Best Practice:** Always prefer constructor injection.
+### Trap 1: Using 'new' Keyword Creates Unmanaged Objects
+
+```java
+@Service
+public class OrderService {
+    
+    public void process() {
+        // ❌ This PaymentService is NOT managed by Spring!
+        // No @Transactional, no @Autowired, no AOP
+        PaymentService payment = new PaymentService();
+        payment.charge();  // Transactions won't work!
+    }
+}
+
+// ✅ Correct: Inject it
+@Service
+public class OrderService {
+    private final PaymentService paymentService;  // Spring managed
+    
+    public OrderService(PaymentService paymentService) {
+        this.paymentService = paymentService;
+    }
+}
+```
+
+### Trap 2: Prototype Bean in Singleton
+
+```java
+@Service
+public class SingletonService {
+    
+    @Autowired
+    private PrototypeBean prototypeBean;  // Injected ONCE at startup!
+    
+    public void doWork() {
+        prototypeBean.process();  // Same instance every time!
+    }
+}
+```
+
+**Solution: Use ObjectFactory or Provider** (See Bean Scope chapter)
+
+### Trap 3: Static Methods Don't Go Through Proxy
 
 ```java
 @Service
 public class PaymentService {
-    private final PaymentGateway gateway;      // Required
-    private NotificationService notifications; // Optional
     
-    // Constructor injection for required dependency
-    public PaymentService(PaymentGateway gateway) {
-        this.gateway = gateway;
-    }
-    
-    // Setter injection for optional dependency
-    @Autowired(required = false)
-    public void setNotifications(NotificationService notifications) {
-        this.notifications = notifications;
+    @Transactional
+    public static void processPayment() {  // ❌ Static!
+        // Transaction NOT applied - static doesn't use 'this'
     }
 }
 ```
 
 ---
 
-## 7. Quick Reference Cheat Sheet
+## 11. How to Explain in Interview
+
+> **Short answer (30 seconds):**
+> "IoC means Spring controls object creation instead of us. We declare our dependencies, Spring creates and wires them. This gives us loose coupling, easy testing, and centralized configuration. ApplicationContext is the feature-rich container that eagerly creates beans and supports events, while BeanFactory is the basic lazy-loading container."
+
+> **Real-world analogy:**
+> "It's like the difference between cooking at home vs. ordering at a restaurant. Without IoC, you buy ingredients, prepare everything yourself. With IoC (restaurant), you just order what you want, and the chef (Spring) prepares it with the right ingredients and brings it to you ready to use."
+
+---
+
+## 12. Quick Reference
 
 ```text
-IoC Container Hierarchy:
-BeanFactory (basic) → ApplicationContext (full features)
+IOC CONTAINER
+──────────────────────────────────────────────────────
+BeanFactory: Basic, lazy loading
+ApplicationContext: Full features, eager loading (use this!)
 
-Bean Lifecycle Order:
+INJECTION TYPES (Preference Order)
+──────────────────────────────────────────────────────
+1. Constructor (required deps, immutable) ✅
+2. Setter (optional deps)
+3. Field (avoid - hard to test) ❌
+
+BEAN LIFECYCLE ORDER
+──────────────────────────────────────────────────────
 Constructor → DI → @PostConstruct → afterPropertiesSet → init-method
                     ↓ (Bean Ready) ↓
-@PreDestroy → destroy → destroy-method
+@PreDestroy → destroy() → destroy-method
 
-Scopes: singleton (default) | prototype | request | session
+KEY ANNOTATIONS
+──────────────────────────────────────────────────────
+@Component → Generic bean
+@Service → Business layer
+@Repository → Data layer (+ exception translation)
+@Controller → Web layer
+@Configuration → Defines @Bean methods
+@Bean → Factory method for creating bean
 
-Injection Types:
-- Constructor (preferred, immutable)
-- Setter (optional deps)
-- Field @Autowired (avoid in production)
+MULTIPLE BEANS RESOLUTION
+──────────────────────────────────────────────────────
+@Primary → Default choice
+@Qualifier("name") → Specific bean
+List<T> → Inject all of type
 ```
 
 ---
 
-**Next:** [Spring Transactions & Pitfalls →](./03-spring-transactions)
+**Next:** [Spring Transactions & Common Pitfalls →](./03-spring-transactions)
