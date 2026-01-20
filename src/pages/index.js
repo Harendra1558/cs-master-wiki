@@ -494,13 +494,13 @@ function Projects() {
             icon: '💰',
         },
         {
-            title: 'Multi-Threaded HTTP Server & MVC Framework',
-            description: 'High-performance HTTP/1.1 Web Server built from scratch in Java 21, bypassing standard containers. Features a custom MVC framework with a reflection-based annotation engine (@GetMapping) mimicking Spring Boot. Uses a fixed thread pool architecture for concurrent request handling.',
-            tech: ['Java 21', 'Multithreading', 'Reflection API', 'Java I/O'],
-            github: 'https://github.com/Harendra1558',
-            demo: null,
-            featured: false,
-            icon: '⚡',
+            title: 'HSpring Framework',
+            description: 'A lightweight Spring Boot implementation built from scratch in Java 17. Features a complete IoC Container with component scanning, Dependency Injection using Reflection API with @Autowired support, custom annotation processor for @RestController, @GetMapping, @PostMapping, URL routing with path variable extraction, and a filter chain pattern for request/response interception.',
+            tech: ['Java 17', 'Maven', 'Reflection API', 'Jackson', 'Railway'],
+            github: 'https://github.com/Harendra1558/hspring-framework',
+            demo: 'https://hspring-framework-production.up.railway.app',
+            featured: true,
+            icon: '🌱',
         },
     ];
 
