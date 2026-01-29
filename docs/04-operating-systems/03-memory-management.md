@@ -389,4 +389,4 @@ Heap + Metaspace + (Threads × Stack) + Native
 
 ---
 
-**Next:** [Computer Networks Fundamentals →](../05-computer-networks/01-intro)
+**Next:** [4. File Descriptors & I/O →](./file-descriptors-io)

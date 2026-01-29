@@ -64,54 +64,56 @@ const config = {
         ],
       },
     ],
-    [
-      '@docusaurus/plugin-pwa',
-      {
-        debug: true,
-        offlineModeActivationStrategies: [
-          'appInstalled',
-          'standalone',
-          'queryString',
-        ],
-        pwaHead: [
-          {
-            tagName: 'link',
-            attributes: {
-              rel: 'icon',
-              href: '/img/logo.svg',
-            },
-          },
-          {
-            tagName: 'link',
-            attributes: {
-              rel: 'manifest',
-              href: '/manifest.json', // Docusaurus generates this
-            },
-          },
-          {
-            tagName: 'meta',
-            attributes: {
-              name: 'theme-color',
-              content: '#667eea',
-            },
-          },
-          {
-            tagName: 'meta',
-            attributes: {
-              name: 'apple-mobile-web-app-capable',
-              content: 'yes',
-            },
-          },
-          {
-            tagName: 'meta',
-            attributes: {
-              name: 'apple-mobile-web-app-status-bar-style',
-              content: '#000',
-            },
-          },
-        ],
-      },
-    ],
+    // PWA plugin temporarily disabled - requires swizzled PwaReloadPopup component
+    // Re-enable after running: npx docusaurus swizzle @docusaurus/plugin-pwa PwaReloadPopup
+    // [
+    //   '@docusaurus/plugin-pwa',
+    //   {
+    //     debug: true,
+    //     offlineModeActivationStrategies: [
+    //       'appInstalled',
+    //       'standalone',
+    //       'queryString',
+    //     ],
+    //     pwaHead: [
+    //       {
+    //         tagName: 'link',
+    //         attributes: {
+    //           rel: 'icon',
+    //           href: '/img/logo.svg',
+    //         },
+    //       },
+    //       {
+    //         tagName: 'link',
+    //         attributes: {
+    //           rel: 'manifest',
+    //           href: '/manifest.json',
+    //         },
+    //       },
+    //       {
+    //         tagName: 'meta',
+    //         attributes: {
+    //           name: 'theme-color',
+    //           content: '#667eea',
+    //         },
+    //       },
+    //       {
+    //         tagName: 'meta',
+    //         attributes: {
+    //           name: 'apple-mobile-web-app-capable',
+    //           content: 'yes',
+    //         },
+    //       },
+    //       {
+    //         tagName: 'meta',
+    //         attributes: {
+    //           name: 'apple-mobile-web-app-status-bar-style',
+    //           content: '#000',
+    //         },
+    //       },
+    //     ],
+    //   },
+    // ],
   ],
 
 
@@ -249,7 +251,7 @@ const config = {
               },
               {
                 label: "Contact",
-                to: "/#contact",
+                href: "/#contact",
               },
             ],
           },
