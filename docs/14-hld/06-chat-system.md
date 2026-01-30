@@ -757,4 +757,4 @@ CREATE TABLE groups (
 
 ---
 
-**Next:** [7. Design Notification System →](./notification-system)
+**Next:** [7. Design Notification System →](./07-notification-system)

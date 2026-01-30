@@ -496,4 +496,4 @@ ANALYTICS:
 
 ---
 
-**Next:** [4. Design Rate Limiter →](./rate-limiter)
+**Next:** [4. Design Rate Limiter →](./04-rate-limiter)

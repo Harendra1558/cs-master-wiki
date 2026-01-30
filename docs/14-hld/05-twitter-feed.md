@@ -604,4 +604,4 @@ USER READS FEED:
 
 ---
 
-**Next:** [6. Design Chat System →](./chat-system)
+**Next:** [6. Design Chat System →](./06-chat-system)

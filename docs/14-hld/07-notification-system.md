@@ -901,4 +901,4 @@ SOLUTIONS:
 
 ---
 
-**Next:** [8. Design Distributed Cache →](./distributed-cache)
+**Next:** [8. Design Distributed Cache →](./08-distributed-cache)

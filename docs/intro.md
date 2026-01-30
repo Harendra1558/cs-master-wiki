@@ -2,111 +2,331 @@
 id: intro
 sidebar_position: 0
 slug: /
-title: Welcome to CS Fundamentals Wiki
-description: Comprehensive guide to computer science fundamentals covering JVM, databases, distributed systems, and more with production-ready examples.
-keywords: [computer science, java, jvm, database, system design, microservices]
+title: CS Fundamentals Wiki
+description: Complete backend engineering guide - Java, Spring Boot, System Design, Distributed Systems, and 80+ interview-ready chapters for SDE-2+ roles.
+keywords: [computer science, java, jvm, database, system design, microservices, backend engineering, interview preparation]
 ---
 
 # CS Fundamentals Wiki
 
-Welcome to my comprehensive guide to **Computer Science Fundamentals**! This wiki covers everything from JVM internals to distributed systems, with a focus on **production-ready knowledge** that you can apply in real-world scenarios.
-
-:::tip Why This Matters
-These aren't just theoretical concepts—every topic here includes production examples, performance benchmarks, and best practices learned from building scalable systems.
+:::tip 🎯 Built for SDE-2+ Backend Interviews
+This wiki contains **82 comprehensive chapters** covering every topic you need to crack backend engineering interviews at top tech companies. Production-ready knowledge with real-world examples.
 :::
 
-## 📚 What You'll Find Here
+## 📊 Content Overview
 
-This wiki is organized into 14 major topics, progressing from foundational concepts to advanced distributed systems:
-
-- **[Java & JVM](./01-java-jvm-internals/01-intro.md)** - Memory model, GC tuning, concurrency ✅
-- **[DBMS](./02-dbms-data-persistence/01-intro.md)** - Indexing, transactions, query optimization ✅
-- **[Spring Boot](./03-spring-boot-internals/01-intro.md)** - IoC, transactions, async processing ✅
-- **[Security](./06-security-authentication/01-intro.md)** - JWT, OAuth2, authentication ✅
-
-### System Fundamentals
-- **[Operating Systems](./04-operating-systems/01-intro.md)** - Processes, threads, memory management ✅
-- **[Networks](./05-computer-networks/01-intro.md)** - TCP/IP, HTTP, load balancing ✅
-
-### Distributed Systems
-- **[Distributed Systems](./07-distributed-systems/01-intro.md)** - CAP theorem, consensus, replication ✅
-- **[Caching](./08-caching/01-intro.md)** - Redis, cache strategies, invalidation ✅
-- **[Message Queues](./09-message-queues/01-intro.md)** - Kafka, RabbitMQ, event-driven architecture ✅
-- **[Microservices](./10-microservices-architecture/01-intro.md)** - Patterns, circuit breaker, saga ✅
-
-### Design & Best Practices
-- **[API Design](./11-api-design/01-intro.md)** - REST, versioning, best practices ✅
-
-### Advanced Topics
-- **[Java 8+ Features](./12-java-features/01-intro.md)** - Streams, lambdas, modules ✅
-- **[Low-Level Design (LLD)](./13-lld/01-intro.md)** - Design patterns, SOLID principles ✅
-- **[High-Level Design (HLD)](./14-hld/01-intro.md)** - System architecture, scalability ✅
-
-## 🎯 How to Use This Wiki
-
-### For Interview Preparation
-Each section includes:
-- ✅ Real interview questions
-- ✅ Common pitfalls to avoid
-- ✅ Production scenarios
-
-### For Practical Learning
-- 📝 Code examples with explanations
-- 📊 Performance comparisons
-- 🎨 Visual diagrams (Mermaid)
-- ⚡ Best practices
-
-### For Quick Reference
-- Use the search function (Ctrl/Cmd + K)
-- Bookmark frequently accessed pages
-- Navigate via the sidebar
-
-## ✨ Featured Content
-
-### 🔥 JVM Memory Model & Concurrency
-Dive deep into heap/stack memory, garbage collection algorithms, and concurrent programming with AtomicInteger, ReentrantLock, and the Java Memory Model.
-
-[Start Reading →](/docs/category/1-java--jvm-internals)
-
-### 💾 DBMS & Data Persistence
-Master database indexing strategies, transaction isolation levels, deadlock prevention, and query optimization with real SQL examples.
-
-[Explore DBMS →](/docs/category/2-dbms--data-persistence)
-
-## 🚀 What Makes This Different?
-
-Unlike other documentation:
-- ✅ **Production-focused** - Real-world examples from actual systems
-- ✅ **Performance-oriented** - Benchmarks and optimization tips
-- ✅ **Anti-patterns included** - Learn what NOT to do
-- ✅ **Visual learning** - Diagrams for complex concepts
-- ✅ **Complete coverage** - From basics to advanced topics
-
-## 📈 Content Status
-
-| Status | Meaning |
-|--------|---------|
-| ✅ | Production-ready content (2,500+ lines) |
-| 🚧 | Coming soon |
-| 📝 | Draft/Work in progress |
-
-Current completion: **100%** (14/14 topics complete)
-
-## 💡 Contributing & Feedback
-
-Found an error? Have a suggestion? Want to see a specific topic covered?
-
-- 📧 Email me: [harendrakumar1558@gmail.com](mailto:harendrakumar1558@gmail.com)
-- 💼 Connect on [LinkedIn](https://www.linkedin.com/in/harendra1558/)
-- 🐙 GitHub: [Harendra1558](https://github.com/Harendra1558)
-
-## 🔖 Quick Links
-
-- [Blog](/blog) - Latest technical articles
-- [Portfolio](/) - About me & projects
-- [GitHub](https://github.com/Harendra1558/cs-master-wiki) - Source code
+```text
+┌─────────────────────────────────────────────────────────────────────┐
+│                   COMPLETE BACKEND ENGINEERING GUIDE                 │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│   📚 14 Major Topics           📄 82 Chapters                       │
+│   💾 1.87 MB+ Content          ✅ 100% Complete                     │
+│                                                                      │
+│   Each chapter includes:                                            │
+│   ├── 📝 Detailed explanations with diagrams                        │
+│   ├── 💻 Production-ready code examples                             │
+│   ├── ❓ Interview questions & answers                               │
+│   ├── ⚠️ Common pitfalls to avoid                                   │
+│   └── 🎯 Quick reference cards                                      │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
-**Ready to dive in?** Start with [Java & JVM](/docs/category/1-java--jvm-internals) or [DBMS](/docs/category/2-dbms--data-persistence) for production-grade knowledge!
+## 🔥 Core Java & Backend
 
+### [1. Java & JVM Internals](/docs/java-jvm-internals/intro) ⭐⭐⭐⭐⭐
+Deep dive into JVM internals - the foundation of every Java application.
+
+| Chapter | Topics Covered |
+|---------|----------------|
+| JVM Architecture | Class loading, runtime data areas, execution engine |
+| Memory Model | Heap, stack, metaspace, JMM, happens-before |
+| Garbage Collection | G1, ZGC, CMS, tuning strategies, GC logs |
+| Concurrency | Threads, locks, atomic operations, ThreadLocal |
+
+---
+
+### [2. DBMS & Data Persistence](/docs/dbms-data-persistence/intro) ⭐⭐⭐⭐⭐
+Master database fundamentals - critical for any backend role.
+
+| Chapter | Topics Covered |
+|---------|----------------|
+| Indexes | B-Tree, Hash, Composite, Covering indexes, EXPLAIN |
+| Transactions | ACID, Isolation levels, Phantom reads, Locking |
+| Query Optimization | Slow query analysis, N+1, batch operations |
+| Database Scaling | Replication, Sharding, Read replicas |
+| SQL vs NoSQL | When to use each, CAP theorem implications |
+| Connection Pooling | HikariCP, sizing, troubleshooting |
+
+---
+
+### [3. Spring Boot Internals](/docs/spring-boot-internals/intro) ⭐⭐⭐⭐⭐
+Go beyond annotations - understand how Spring Boot really works.
+
+| Chapter | Topics Covered |
+|---------|----------------|
+| IoC Container | Bean lifecycle, ApplicationContext, BeanFactory |
+| Dependency Injection | Constructor vs Setter, @Autowired, @Qualifier |
+| Bean Scopes | Singleton, Prototype, Request, Session, Proxy mechanism |
+| Auto-Configuration | @Conditional, spring.factories, custom starters |
+| AOP | Proxies, AspectJ, @Transactional internals |
+| Async Processing | @Async, @Scheduled, ThreadPoolTaskExecutor |
+| Servlet Model | DispatcherServlet, Filter chain, Handler mapping |
+
+---
+
+### [12. Java 8-21 Features](/docs/java-features/intro) ⭐⭐⭐⭐
+Modern Java features that interviewers love to ask about.
+
+| Chapter | Topics Covered |
+|---------|----------------|
+| Java 8 | Lambdas, Streams, Optional, Method References |
+| CompletableFuture | Async programming, chaining, exception handling |
+| Java 9-17 | var, Records, Sealed Classes, Pattern Matching |
+| Java 21 | Virtual Threads, Structured Concurrency, Sequenced Collections |
+
+---
+
+## 🌐 Systems & Networks
+
+### [4. Operating Systems](/docs/operating-systems/intro) ⭐⭐⭐⭐
+Essential OS concepts for debugging and performance tuning.
+
+| Chapter | Topics Covered |
+|---------|----------------|
+| Processes & Threads | Context switching, scheduling, thread pools |
+| Memory Management | Virtual memory, paging, OOM killer |
+| File Descriptors & I/O | ulimit, blocking/non-blocking, epoll |
+| System Calls | User/kernel mode, strace, syscall overhead |
+
+---
+
+### [5. Computer Networks](/docs/computer-networks/intro) ⭐⭐⭐⭐⭐
+Networking fundamentals every backend engineer must know.
+
+| Chapter | Topics Covered |
+|---------|----------------|
+| OSI & TCP/IP | Layers, protocols, encapsulation |
+| HTTP Deep Dive | HTTP/1.1, HTTP/2, HTTP/3, headers, caching |
+| TCP Internals | 3-way handshake, flow control, congestion |
+| DNS | Resolution, caching, TTL, troubleshooting |
+| Load Balancing | L4 vs L7, algorithms, sticky sessions |
+| Proxies | Forward, reverse, Nginx configuration |
+| CDN | Edge caching, cache invalidation |
+| WebSockets | Real-time communication, connection lifecycle |
+
+---
+
+## 🔐 Security
+
+### [6. Security & Authentication](/docs/security-authentication/intro) ⭐⭐⭐⭐⭐
+Build secure applications - non-negotiable for production systems.
+
+| Chapter | Topics Covered |
+|---------|----------------|
+| Auth Fundamentals | Authentication vs Authorization, tokens |
+| JWT Deep Dive | Structure, validation, refresh tokens |
+| CORS | Preflight requests, configuration, security |
+| OAuth 2.0 & OIDC | Flows, tokens, social login |
+| Spring Security | Filter chain, custom authentication, method security |
+| API Security & OWASP | Top 10 vulnerabilities, injection, XSS, CSRF |
+
+---
+
+## 🏗️ Distributed Systems
+
+### [7. Distributed Systems](/docs/distributed-systems/intro) ⭐⭐⭐⭐⭐
+Core concepts for building scalable, reliable systems.
+
+| Chapter | Topics Covered |
+|---------|----------------|
+| CAP Theorem | Consistency, availability, partition tolerance |
+| Consistency Models | Strong, eventual, causal consistency |
+| Consensus | Paxos, Raft, leader election |
+| Replication | Primary-replica, multi-leader, quorum |
+| Clocks & Ordering | Logical clocks, vector clocks, timestamps |
+| Distributed Transactions | 2PC, Saga pattern, compensating transactions |
+| Failure Handling | Retry strategies, circuit breakers, idempotency |
+
+---
+
+### [8. Caching](/docs/caching/intro) ⭐⭐⭐⭐
+Speed up your applications with effective caching.
+
+| Chapter | Topics Covered |
+|---------|----------------|
+| Caching Strategies | Cache-aside, read-through, write-through |
+| Redis Deep Dive | Data structures, persistence, clustering |
+| Cache Invalidation | TTL, event-driven, versioning |
+| Distributed Caching | Consistent hashing, replication |
+
+---
+
+### [9. Message Queues](/docs/message-queues/intro) ⭐⭐⭐⭐⭐
+Decouple services with async communication.
+
+| Chapter | Topics Covered |
+|---------|----------------|
+| Kafka | Topics, partitions, consumer groups, exactly-once |
+| RabbitMQ | Exchanges, queues, bindings, acknowledgments |
+| Event-Driven Architecture | Event sourcing, CQRS, saga patterns |
+| Comparison | Kafka vs RabbitMQ vs SQS |
+
+---
+
+### [10. Microservices Architecture](/docs/microservices-architecture/intro) ⭐⭐⭐⭐⭐
+Design and build production microservices.
+
+| Chapter | Topics Covered |
+|---------|----------------|
+| Microservices Patterns | Saga, Circuit Breaker, Strangler Fig |
+| Service Mesh | Istio, sidecar proxy, observability |
+| Deployment Strategies | Blue-green, canary, rolling updates |
+| Observability | Logging, metrics, tracing, alerting |
+
+---
+
+## 📐 API & Design
+
+### [11. API Design](/docs/api-design/intro) ⭐⭐⭐⭐
+Design APIs that are easy to use and hard to misuse.
+
+| Chapter | Topics Covered |
+|---------|----------------|
+| REST Best Practices | Resource naming, HTTP methods, status codes |
+| API Contracts | OpenAPI, versioning, backward compatibility |
+| GraphQL | Queries, mutations, N+1 problem, DataLoader |
+
+---
+
+### [13. Low Level Design (LLD)](/docs/lld/intro) ⭐⭐⭐⭐⭐
+Object-oriented design and patterns for interviews.
+
+| Chapter | Topics Covered |
+|---------|----------------|
+| SOLID Principles | SRP, OCP, LSP, ISP, DIP with examples |
+| OOP Fundamentals | Abstraction, encapsulation, inheritance, polymorphism |
+| Design Patterns | Creational, Structural, Behavioral patterns |
+| LLD Interview Problems | Parking Lot, Elevator, LRU Cache, BookMyShow |
+
+---
+
+### [14. High Level Design (HLD)](/docs/hld/intro) ⭐⭐⭐⭐⭐
+System design interviews - the most critical skill for SDE-2+.
+
+| Chapter | Topics Covered |
+|---------|----------------|
+| System Design Framework | 5-step approach, estimations, architecture |
+| URL Shortener | ID generation, caching, scaling |
+| Rate Limiter | Token bucket, sliding window, Redis implementation |
+| Twitter Feed | Fanout strategies, ranking, hybrid approach |
+| Chat System | WebSocket, message routing, presence |
+| Notification System | Multi-channel delivery, templates, reliability |
+| Distributed Cache | Patterns, eviction, consistency, stampede |
+
+---
+
+## 🎯 Interview Preparation Guide
+
+```text
+┌─────────────────────────────────────────────────────────────────────┐
+│                   RECOMMENDED STUDY ORDER                            │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  WEEK 1-2: CORE FUNDAMENTALS                                        │
+│  ├── Java & JVM Internals (must-know)                               │
+│  ├── DBMS & Data Persistence                                        │
+│  └── Operating Systems                                              │
+│                                                                      │
+│  WEEK 3-4: FRAMEWORKS & SECURITY                                    │
+│  ├── Spring Boot Internals                                          │
+│  ├── Java 8-21 Features                                             │
+│  └── Security & Authentication                                      │
+│                                                                      │
+│  WEEK 5-6: DISTRIBUTED SYSTEMS                                      │
+│  ├── Distributed Systems Concepts                                   │
+│  ├── Caching                                                        │
+│  ├── Message Queues                                                 │
+│  └── Microservices Architecture                                     │
+│                                                                      │
+│  WEEK 7-8: DESIGN ROUNDS                                            │
+│  ├── API Design                                                     │
+│  ├── Low Level Design (LLD)                                         │
+│  └── High Level Design (HLD) - MOST IMPORTANT                       │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## ⚡ Quick Access
+
+### 🔥 Most Asked Topics
+
+| Topic | Chapter | Interview Frequency |
+|-------|---------|---------------------|
+| JVM Architecture & Memory | [JVM Internals](/docs/java-jvm-internals/jvm-architecture) | ⭐⭐⭐⭐⭐ |
+| Garbage Collection | [JVM Internals](/docs/java-jvm-internals/garbage-collection) | ⭐⭐⭐⭐⭐ |
+| Database Indexes | [DBMS](/docs/dbms-data-persistence/indexes) | ⭐⭐⭐⭐⭐ |
+| Transaction Isolation | [DBMS](/docs/dbms-data-persistence/transactions) | ⭐⭐⭐⭐⭐ |
+| Spring IoC & Bean Lifecycle | [Spring Boot](/docs/spring-boot-internals/ioc-container) | ⭐⭐⭐⭐⭐ |
+| @Transactional internals | [Spring Boot](/docs/spring-boot-internals/spring-transactions) | ⭐⭐⭐⭐⭐ |
+| JWT & OAuth 2.0 | [Security](/docs/security-authentication/auth-security) | ⭐⭐⭐⭐⭐ |
+| CAP Theorem | [Distributed Systems](/docs/distributed-systems/cap-theorem) | ⭐⭐⭐⭐⭐ |
+| Kafka Deep Dive | [Message Queues](/docs/message-queues/kafka-deep-dive) | ⭐⭐⭐⭐⭐ |
+| URL Shortener Design | [HLD](/docs/hld/url-shortener) | ⭐⭐⭐⭐⭐ |
+| Rate Limiter Design | [HLD](/docs/hld/rate-limiter) | ⭐⭐⭐⭐⭐ |
+| Twitter Feed Design | [HLD](/docs/hld/twitter-feed) | ⭐⭐⭐⭐⭐ |
+
+### 🛠️ Code Examples
+
+Every chapter includes production-ready code:
+- **Java** - Core language, Spring Boot, tests
+- **SQL** - Optimized queries, indexes, transactions
+- **YAML** - Spring configuration, Docker, Kubernetes
+- **Redis/Lua** - Caching, rate limiting scripts
+
+---
+
+## 📈 Content Statistics
+
+| Metric | Value |
+|--------|-------|
+| Total Sections | 14 |
+| Total Chapters | 82 |
+| Total Content | 1.87 MB+ |
+| Code Examples | 500+ |
+| Diagrams | 200+ |
+| Interview Questions | 300+ |
+
+---
+
+## 💡 How to Use This Wiki
+
+### 🔍 Search
+Press `Ctrl/Cmd + K` to search across all content.
+
+### 📖 Navigation
+Use the sidebar to browse topics or follow the recommended study order above.
+
+### 📝 Notes
+- ⭐⭐⭐⭐⭐ = Critical for SDE-2+ interviews
+- ⭐⭐⭐⭐ = Frequently asked
+- Each chapter can be read independently
+
+---
+
+## 👨‍💻 About
+
+Built by **Harendra Kumar** | Backend Engineer
+
+- 📧 [harendrakumar1558@gmail.com](mailto:harendrakumar1558@gmail.com)
+- 💼 [LinkedIn](https://www.linkedin.com/in/harendra1558/)
+- 🐙 [GitHub](https://github.com/Harendra1558)
+
+---
+
+**Ready to start?** Begin with [Java & JVM Internals →](/docs/java-jvm-internals/intro)

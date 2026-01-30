@@ -35,13 +35,13 @@ System Design rounds are **make-or-break** for SDE-2+ roles. You'll be expected 
 
 | Chapter | Topic | Difficulty |
 |---------|-------|------------|
-| [2. System Design Framework](./system-design-framework) | Structured approach, estimations, patterns | Foundation |
-| [3. Design URL Shortener](./url-shortener) | bit.ly - ID generation, redirects, analytics | ⭐⭐ Easy |
-| [4. Design Rate Limiter](./rate-limiter) | API protection, algorithms, distributed | ⭐⭐⭐ Medium |
-| [5. Design Twitter Feed](./twitter-feed) | News feed, fanout, ranking | ⭐⭐⭐⭐ Hard |
-| [6. Design Chat System](./chat-system) | WhatsApp/Slack - real-time messaging | ⭐⭐⭐⭐ Hard |
-| [7. Design Notification System](./notification-system) | Push, email, SMS at scale | ⭐⭐⭐ Medium |
-| [8. Design Distributed Cache](./distributed-cache) | Multi-level caching, consistency | ⭐⭐⭐⭐ Hard |
+| [2. System Design Framework](./02-system-design-framework) | Structured approach, estimations, patterns | Foundation |
+| [3. Design URL Shortener](./03-url-shortener) | bit.ly - ID generation, redirects, analytics | ⭐⭐ Easy |
+| [4. Design Rate Limiter](./04-rate-limiter) | API protection, algorithms, distributed | ⭐⭐⭐ Medium |
+| [5. Design Twitter Feed](./05-twitter-feed) | News feed, fanout, ranking | ⭐⭐⭐⭐ Hard |
+| [6. Design Chat System](./06-chat-system) | WhatsApp/Slack - real-time messaging | ⭐⭐⭐⭐ Hard |
+| [7. Design Notification System](./07-notification-system) | Push, email, SMS at scale | ⭐⭐⭐ Medium |
+| [8. Design Distributed Cache](./08-distributed-cache) | Multi-level caching, consistency | ⭐⭐⭐⭐ Hard |
 
 ---
 
@@ -284,4 +284,4 @@ Strategy:
 
 ---
 
-**Next:** [2. System Design Framework →](./system-design-framework)
+**Next:** [2. System Design Framework →](./02-system-design-framework)
