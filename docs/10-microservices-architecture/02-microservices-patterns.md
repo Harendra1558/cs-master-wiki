@@ -1,139 +1,157 @@
 ---
-title: 2. Microservices Patterns & Best Practices
+title: 2. Core Microservices Patterns
 sidebar_position: 2
-description: Master microservices patterns, service communication, and resilience patterns for interviews.
-keywords: [microservices, saga pattern, circuit breaker, service mesh, api gateway]
+description: Master API Gateway, Circuit Breaker, Saga, and Service Discovery patterns for interviews.
+keywords: [microservices, saga pattern, circuit breaker, api gateway, service discovery, resilience4j]
 ---
 
-# Microservices Patterns & Best Practices
+# Core Microservices Patterns
 
 :::info Architecture Essential
-Microservices patterns like **Circuit Breaker**, **Saga**, and **CQRS** are asked in every senior backend interview.
+These patterns are asked in **every senior backend interview**. Know when and why to use each.
 :::
 
-## 1. Microservice Architecture Overview
+## 1. Service Communication
 
-### Monolith vs Microservices
+### Synchronous Communication
 
 ```mermaid
-graph TD
-    subgraph "Monolith"
-        M[Single Application]
-        M --> DB1[(Single Database)]
-    end
+sequenceDiagram
+    participant Client
+    participant OrderService
+    participant UserService
+    participant PaymentService
     
-    subgraph "Microservices"
-        GW[API Gateway]
-        GW --> US[User Service]
-        GW --> OS[Order Service]
-        GW --> PS[Payment Service]
-        US --> DB2[(User DB)]
-        OS --> DB3[(Order DB)]
-        PS --> DB4[(Payment DB)]
-    end
+    Client->>OrderService: Create Order
+    OrderService->>UserService: Get User Details
+    UserService-->>OrderService: User Data
+    OrderService->>PaymentService: Process Payment
+    PaymentService-->>OrderService: Payment Result
+    OrderService-->>Client: Order Created
 ```
 
-### When to Use Microservices
-
-| Use Microservices When | Stick with Monolith When |
-|------------------------|--------------------------|
-| Large team (10+ developers) | Small team (under 5) |
-| Need independent scaling | Uniform scaling is OK |
-| Different tech stacks needed | Single tech stack |
-| High availability required | Simpler deployment OK |
-| Clear domain boundaries | Domain is unclear |
-
----
-
-## 2. Service Communication Patterns
-
-### Synchronous (HTTP/gRPC)
-
 ```java
-// RestTemplate (legacy)
+// Option 1: RestTemplate (Legacy)
 User user = restTemplate.getForObject(
     "http://user-service/users/{id}", User.class, userId);
 
-// WebClient (reactive, preferred)
+// Option 2: WebClient (Reactive, Preferred)
 User user = webClient.get()
     .uri("http://user-service/users/{id}", userId)
     .retrieve()
     .bodyToMono(User.class)
+    .timeout(Duration.ofSeconds(5))
     .block();
 
-// Feign Client (declarative)
-@FeignClient(name = "user-service")
+// Option 3: Feign Client (Declarative, Best for Spring)
+@FeignClient(name = "user-service", fallback = UserClientFallback.class)
 public interface UserClient {
+    
     @GetMapping("/users/{id}")
     User getUser(@PathVariable Long id);
+    
+    @PostMapping("/users")
+    User createUser(@RequestBody CreateUserRequest request);
+}
+
+@Component
+public class UserClientFallback implements UserClient {
+    public User getUser(Long id) {
+        return User.builder().id(id).name("Unknown").build();
+    }
+    public User createUser(CreateUserRequest req) {
+        throw new ServiceUnavailableException("User service unavailable");
+    }
 }
 ```
 
-### Asynchronous (Message Queue)
+### Asynchronous Communication
 
 ```java
-// Publishing event
+// Event Producer (Order Service)
 @Service
 public class OrderService {
+    
     @Autowired
     private KafkaTemplate<String, OrderEvent> kafka;
     
-    public Order createOrder(Order order) {
-        Order saved = orderRepository.save(order);
+    @Transactional
+    public Order createOrder(CreateOrderRequest request) {
+        Order order = orderRepository.save(new Order(request));
         
-        // Publish event for other services
-        kafka.send("order-events", new OrderEvent("CREATED", saved));
+        // Publish event - other services react
+        kafka.send("order-events", order.getId().toString(),
+            new OrderCreatedEvent(order));
         
-        return saved;
+        return order;
     }
 }
 
-// Consuming event
+// Event Consumer (Notification Service)
 @Service
-public class InventoryService {
-    @KafkaListener(topics = "order-events")
-    public void handleOrder(OrderEvent event) {
-        if ("CREATED".equals(event.getType())) {
-            reserveInventory(event.getOrder());
+public class NotificationService {
+    
+    @KafkaListener(topics = "order-events", groupId = "notifications")
+    public void handleOrderEvent(OrderEvent event) {
+        if (event instanceof OrderCreatedEvent created) {
+            sendConfirmationEmail(created.getOrder());
         }
     }
 }
 ```
 
-### Comparison
+### When to Use Each
 
-| Synchronous | Asynchronous |
-|-------------|--------------|
-| Simple to implement | More complex |
-| Immediate response | No immediate response |
-| Tight coupling | Loose coupling |
-| Cascade failures possible | Failure isolation |
-| Lower latency for simple calls | Better for long operations |
+| Synchronous (REST/gRPC) | Asynchronous (Events) |
+|------------------------|----------------------|
+| Need immediate response | Fire-and-forget OK |
+| Simple request-response | Long-running processes |
+| Strong consistency needed | Eventual consistency OK |
+| Low latency required | High throughput needed |
+| Few downstream calls | Many subscribers |
 
 ---
 
-## 3. API Gateway Pattern
+## 2. API Gateway Pattern
 
-### What API Gateway Does
+### Responsibilities
 
-```mermaid
-graph LR
-    Client[Mobile/Web] --> GW[API Gateway]
-    
-    GW --> US[User Service]
-    GW --> OS[Order Service]
-    GW --> PS[Product Service]
-    
-    subgraph "Gateway Responsibilities"
-        Auth[Authentication]
-        RL[Rate Limiting]
-        LB[Load Balancing]
-        Cache[Caching]
-        Log[Logging]
-    end
+```text
+┌─────────────────────────────────────────────────────────────────────┐
+│                         API GATEWAY                                  │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│   Client Request                                                     │
+│        │                                                             │
+│        ▼                                                             │
+│   ┌─────────────────────────────────────────────────────────────┐   │
+│   │  1. AUTHENTICATION                                          │   │
+│   │     ├── Validate JWT/OAuth tokens                           │   │
+│   │     └── Extract user context                                │   │
+│   ├─────────────────────────────────────────────────────────────┤   │
+│   │  2. RATE LIMITING                                           │   │
+│   │     ├── Per-user limits (100 req/min)                       │   │
+│   │     └── Per-IP limits (1000 req/min)                        │   │
+│   ├─────────────────────────────────────────────────────────────┤   │
+│   │  3. ROUTING                                                 │   │
+│   │     ├── /api/users/** → user-service                        │   │
+│   │     ├── /api/orders/** → order-service                      │   │
+│   │     └── /api/products/** → product-service                  │   │
+│   ├─────────────────────────────────────────────────────────────┤   │
+│   │  4. LOAD BALANCING                                          │   │
+│   │     └── Round-robin across service instances                │   │
+│   ├─────────────────────────────────────────────────────────────┤   │
+│   │  5. CIRCUIT BREAKER                                         │   │
+│   │     └── Fallback if service unavailable                     │   │
+│   ├─────────────────────────────────────────────────────────────┤   │
+│   │  6. RESPONSE TRANSFORMATION                                 │   │
+│   │     └── Aggregate responses, filter fields                  │   │
+│   └─────────────────────────────────────────────────────────────┘   │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘
 ```
 
-### Spring Cloud Gateway Example
+### Spring Cloud Gateway Implementation
 
 ```java
 @Configuration
@@ -142,48 +160,142 @@ public class GatewayConfig {
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder) {
         return builder.routes()
+            // User Service Route
             .route("user-service", r -> r
                 .path("/api/users/**")
                 .filters(f -> f
                     .stripPrefix(1)
                     .addRequestHeader("X-Request-Source", "gateway")
-                    .retry(3))
+                    .retry(config -> config
+                        .setRetries(3)
+                        .setBackoff(Duration.ofMillis(100), 
+                                   Duration.ofSeconds(1), 2, true)))
                 .uri("lb://user-service"))
             
+            // Order Service with Circuit Breaker
             .route("order-service", r -> r
                 .path("/api/orders/**")
                 .filters(f -> f
                     .stripPrefix(1)
                     .circuitBreaker(c -> c
-                        .setName("orderCB")
+                        .setName("orderCircuitBreaker")
                         .setFallbackUri("forward:/fallback/orders")))
                 .uri("lb://order-service"))
+            
+            // Rate Limiting
+            .route("product-service", r -> r
+                .path("/api/products/**")
+                .filters(f -> f
+                    .stripPrefix(1)
+                    .requestRateLimiter(c -> c
+                        .setRateLimiter(redisRateLimiter())
+                        .setKeyResolver(userKeyResolver())))
+                .uri("lb://product-service"))
             .build();
+    }
+    
+    @Bean
+    public RedisRateLimiter redisRateLimiter() {
+        return new RedisRateLimiter(100, 200);  // 100 req/sec, burst 200
+    }
+    
+    @Bean
+    public KeyResolver userKeyResolver() {
+        return exchange -> Mono.just(
+            exchange.getRequest().getHeaders()
+                .getFirst("X-User-Id") != null
+                    ? exchange.getRequest().getHeaders().getFirst("X-User-Id")
+                    : exchange.getRequest().getRemoteAddress().getHostString()
+        );
+    }
+}
+
+@RestController
+public class FallbackController {
+    
+    @GetMapping("/fallback/orders")
+    public ResponseEntity<Map<String, String>> ordersFallback() {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+            .body(Map.of(
+                "message", "Order service is temporarily unavailable",
+                "status", "DEGRADED"
+            ));
     }
 }
 ```
 
+### Backend for Frontend (BFF) Pattern
+
+```text
+┌─────────────────────────────────────────────────────────────────────┐
+│                     BFF PATTERN                                      │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│   ┌─────────┐     ┌─────────┐     ┌─────────┐                       │
+│   │  Web    │     │ Mobile  │     │  Admin  │                       │
+│   │  App    │     │   App   │     │  Portal │                       │
+│   └────┬────┘     └────┬────┘     └────┬────┘                       │
+│        │               │               │                             │
+│        ▼               ▼               ▼                             │
+│   ┌─────────┐     ┌─────────┐     ┌─────────┐                       │
+│   │Web BFF  │     │Mobile   │     │Admin BFF│                       │
+│   │(Full    │     │BFF      │     │(All     │                       │
+│   │ data)   │     │(Minimal)│     │ fields) │                       │
+│   └────┬────┘     └────┬────┘     └────┬────┘                       │
+│        │               │               │                             │
+│        └───────────────┼───────────────┘                             │
+│                        │                                             │
+│                        ▼                                             │
+│              ┌─────────────────┐                                     │
+│              │   Microservices │                                     │
+│              └─────────────────┘                                     │
+│                                                                      │
+│   Why BFF?                                                           │
+│   ├── Different data needs per client                               │
+│   ├── Mobile needs minimal data (bandwidth)                         │
+│   ├── Web can handle rich responses                                 │
+│   └── Admin needs all fields                                        │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
 ---
 
-## 4. Circuit Breaker Pattern
+## 3. Circuit Breaker Pattern
 
 ### The Problem: Cascade Failures
 
 ```text
-Service A → Service B (down) → Timeout → Service A threads blocked
-                              → Service A overloaded → Service A fails
-                              → Cascade continues...
+Without Circuit Breaker:
+┌─────────┐     ┌─────────┐     ┌─────────┐
+│Service A│────►│Service B│────►│Service C│ (DOWN!)
+└─────────┘     └─────────┘     └─────────┘
+     │               │               │
+     │          Timeout...       Timeout...
+     │               │               │
+     ▼               ▼               ▼
+  Thread           Thread          Thread
+  blocked          blocked         blocked
+     │               │
+     ▼               ▼
+  All threads exhausted → Service A fails → Cascade!
 ```
 
-### The Solution: Circuit Breaker
+### Circuit Breaker States
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Closed
-    Closed --> Open: Failure threshold reached
-    Open --> HalfOpen: Timeout expires
-    HalfOpen --> Closed: Success
-    HalfOpen --> Open: Failure
+    [*] --> Closed: Initial state
+    
+    Closed --> Open: Failure threshold exceeded
+    note right of Closed: Normal operation, requests pass through
+    
+    Open --> HalfOpen: Wait duration expires
+    note right of Open: All requests fail fast
+    
+    HalfOpen --> Closed: Test requests succeed
+    HalfOpen --> Open: Test requests fail
+    note right of HalfOpen: Allow limited test requests
 ```
 
 ### Resilience4j Implementation
@@ -192,199 +304,344 @@ stateDiagram-v2
 // Configuration
 @Configuration
 public class ResilienceConfig {
+    
     @Bean
     public CircuitBreakerConfig circuitBreakerConfig() {
         return CircuitBreakerConfig.custom()
-            .failureRateThreshold(50)           // Open at 50% failure rate
+            .failureRateThreshold(50)              // Open at 50% failures
+            .slowCallRateThreshold(80)             // Slow = over 2 seconds
+            .slowCallDurationThreshold(Duration.ofSeconds(2))
             .waitDurationInOpenState(Duration.ofSeconds(30))
-            .slidingWindowSize(10)              // Last 10 calls
-            .minimumNumberOfCalls(5)            // Need 5 calls before evaluating
+            .permittedNumberOfCallsInHalfOpenState(5)
+            .slidingWindowType(SlidingWindowType.COUNT_BASED)
+            .slidingWindowSize(10)
+            .minimumNumberOfCalls(5)
+            .build();
+    }
+    
+    @Bean
+    public RetryConfig retryConfig() {
+        return RetryConfig.custom()
+            .maxAttempts(3)
+            .waitDuration(Duration.ofMillis(500))
+            .exponentialBackoffMultiplier(2)       // 500ms, 1s, 2s
+            .retryExceptions(IOException.class, TimeoutException.class)
+            .ignoreExceptions(BusinessException.class)
+            .build();
+    }
+    
+    @Bean
+    public TimeLimiterConfig timeLimiterConfig() {
+        return TimeLimiterConfig.custom()
+            .timeoutDuration(Duration.ofSeconds(3))
             .build();
     }
 }
 
-// Usage with annotation
-@Service
-public class UserService {
-    
-    @CircuitBreaker(name = "userService", fallbackMethod = "getUserFallback")
-    public User getUser(Long userId) {
-        return userClient.getUser(userId);  // External call
-    }
-    
-    public User getUserFallback(Long userId, Exception e) {
-        log.warn("Circuit breaker fallback for user {}", userId);
-        return User.builder()
-            .id(userId)
-            .name("Unknown User")
-            .build();
-    }
-}
-
-// Programmatic usage
+// Service with all resilience patterns
 @Service
 public class PaymentService {
-    private final CircuitBreaker circuitBreaker;
     
-    public PaymentService(CircuitBreakerRegistry registry) {
-        this.circuitBreaker = registry.circuitBreaker("paymentService");
+    private final PaymentGateway gateway;
+    
+    @CircuitBreaker(name = "payment", fallbackMethod = "paymentFallback")
+    @Retry(name = "payment")
+    @TimeLimiter(name = "payment")
+    @Bulkhead(name = "payment")
+    public CompletableFuture<PaymentResult> processPayment(Payment payment) {
+        return CompletableFuture.supplyAsync(() -> 
+            gateway.charge(payment)
+        );
     }
     
-    public PaymentResult processPayment(Payment payment) {
-        return circuitBreaker.executeSupplier(() -> 
-            paymentGateway.process(payment)
+    public CompletableFuture<PaymentResult> paymentFallback(
+            Payment payment, Exception e) {
+        log.warn("Payment fallback triggered for {}: {}", 
+            payment.getId(), e.getMessage());
+        
+        // Queue for retry later
+        pendingPaymentQueue.add(payment);
+        
+        return CompletableFuture.completedFuture(
+            PaymentResult.pending("Payment queued for processing")
         );
     }
 }
 ```
 
+### Bulkhead Pattern
+
+```java
+// Limit concurrent calls to isolate failures
+@Bulkhead(name = "userService", type = Bulkhead.Type.SEMAPHORE)
+public User getUser(Long userId) {
+    return userClient.getUser(userId);
+}
+
+// Configuration: application.yml
+resilience4j:
+  bulkhead:
+    instances:
+      userService:
+        maxConcurrentCalls: 25      # Max 25 concurrent calls
+        maxWaitDuration: 500ms      # Wait max 500ms for permit
+  thread-pool-bulkhead:
+    instances:
+      paymentService:
+        maxThreadPoolSize: 10       # Dedicated thread pool
+        coreThreadPoolSize: 5
+        queueCapacity: 50
+```
+
 ---
 
-## 5. Saga Pattern (Distributed Transactions)
+## 4. Saga Pattern
 
-### The Problem
+### When to Use Saga
 
 ```text
-Order spans multiple services:
-1. Order Service: Create order
-2. Payment Service: Charge customer
-3. Inventory Service: Reserve items
-4. Shipping Service: Create shipment
-
-If step 3 fails, need to undo steps 1 & 2!
-Traditional 2PC is slow and blocks resources.
+Problem: Order requires multiple service transactions
+┌─────────────────────────────────────────────────────────────────────┐
+│  1. Order Service    → Create order record                          │
+│  2. Payment Service  → Charge customer                              │
+│  3. Inventory Service → Reserve items                               │
+│  4. Shipping Service → Schedule delivery                            │
+│                                                                      │
+│  What if step 3 fails?                                              │
+│  ├── Need to refund payment (step 2)                                │
+│  ├── Need to cancel order (step 1)                                  │
+│  └── 2PC is too slow and locks resources                           │
+│                                                                      │
+│  Solution: Saga with compensating transactions                      │
+└─────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Choreography-Based Saga
 
-```mermaid
-sequenceDiagram
-    participant Order
-    participant Payment
-    participant Inventory
-    participant Shipping
-    
-    Order->>Order: Create Order
-    Order->>Payment: OrderCreated event
-    Payment->>Payment: Charge customer
-    Payment->>Inventory: PaymentCompleted event
-    Inventory->>Inventory: Reserve items
-    Inventory->>Shipping: ItemsReserved event
-    
-    Note over Inventory: Reservation fails!
-    Inventory->>Payment: ItemsReservationFailed
-    Payment->>Payment: Refund customer
-    Payment->>Order: PaymentRefunded
-    Order->>Order: Cancel order
-```
+Each service listens to events and publishes its own events:
 
 ```java
-// Each service listens and reacts
+// Order Service - Starts the saga
+@Service
+public class OrderService {
+    
+    @Transactional
+    public Order createOrder(CreateOrderRequest request) {
+        Order order = orderRepository.save(new Order(request));
+        order.setStatus(OrderStatus.PENDING);
+        
+        // Publish event - Payment service will pick this up
+        eventPublisher.publish(new OrderCreatedEvent(order));
+        return order;
+    }
+    
+    @KafkaListener(topics = "payment-events")
+    public void handlePaymentEvents(PaymentEvent event) {
+        if (event instanceof PaymentFailedEvent failed) {
+            // Compensate: Cancel order
+            Order order = orderRepository.findById(failed.getOrderId());
+            order.setStatus(OrderStatus.CANCELLED);
+            orderRepository.save(order);
+        }
+    }
+}
+
+// Payment Service
 @Service
 public class PaymentService {
     
     @KafkaListener(topics = "order-events")
-    public void handleOrderCreated(OrderCreatedEvent event) {
-        try {
-            Payment payment = processPayment(event.getOrder());
-            kafkaTemplate.send("payment-events", 
-                new PaymentCompletedEvent(event.getOrderId(), payment));
-        } catch (Exception e) {
-            kafkaTemplate.send("payment-events",
-                new PaymentFailedEvent(event.getOrderId(), e.getMessage()));
+    public void handleOrderEvents(OrderEvent event) {
+        if (event instanceof OrderCreatedEvent created) {
+            try {
+                Payment payment = processPayment(created.getOrder());
+                eventPublisher.publish(new PaymentCompletedEvent(
+                    created.getOrderId(), payment));
+            } catch (Exception e) {
+                eventPublisher.publish(new PaymentFailedEvent(
+                    created.getOrderId(), e.getMessage()));
+            }
         }
     }
     
     @KafkaListener(topics = "inventory-events")
-    public void handleInventoryFailed(InventoryFailedEvent event) {
-        // Compensating action: Refund
-        refundPayment(event.getOrderId());
+    public void handleInventoryEvents(InventoryEvent event) {
+        if (event instanceof ReservationFailedEvent failed) {
+            // Compensate: Refund payment
+            refundPayment(failed.getOrderId());
+            eventPublisher.publish(new PaymentRefundedEvent(failed.getOrderId()));
+        }
+    }
+}
+
+// Inventory Service
+@Service
+public class InventoryService {
+    
+    @KafkaListener(topics = "payment-events")
+    public void handlePaymentEvents(PaymentEvent event) {
+        if (event instanceof PaymentCompletedEvent completed) {
+            try {
+                reserveItems(completed.getOrderId());
+                eventPublisher.publish(new ReservationCompletedEvent(
+                    completed.getOrderId()));
+            } catch (InsufficientInventoryException e) {
+                eventPublisher.publish(new ReservationFailedEvent(
+                    completed.getOrderId(), e.getMessage()));
+            }
+        }
     }
 }
 ```
 
 ### Orchestration-Based Saga
 
+Central orchestrator controls the flow:
+
 ```java
 @Service
 public class OrderSagaOrchestrator {
     
-    public Order executeOrderSaga(OrderRequest request) {
-        SagaState state = new SagaState();
+    @Autowired private OrderService orderService;
+    @Autowired private PaymentClient paymentClient;
+    @Autowired private InventoryClient inventoryClient;
+    @Autowired private ShippingClient shippingClient;
+    
+    public Order executeSaga(CreateOrderRequest request) {
+        SagaContext ctx = new SagaContext();
         
         try {
             // Step 1: Create Order
-            Order order = orderService.createOrder(request);
-            state.setOrderId(order.getId());
+            Order order = orderService.create(request);
+            ctx.setOrderId(order.getId());
+            ctx.addCompensation(() -> orderService.cancel(order.getId()));
             
             // Step 2: Process Payment
-            Payment payment = paymentService.charge(order);
-            state.setPaymentId(payment.getId());
+            Payment payment = paymentClient.charge(
+                order.getCustomerId(), order.getTotal());
+            ctx.setPaymentId(payment.getId());
+            ctx.addCompensation(() -> paymentClient.refund(payment.getId()));
             
             // Step 3: Reserve Inventory
-            inventoryService.reserve(order.getItems());
-            state.setInventoryReserved(true);
+            Reservation reservation = inventoryClient.reserve(order.getItems());
+            ctx.setReservationId(reservation.getId());
+            ctx.addCompensation(() -> inventoryClient.release(reservation.getId()));
             
-            // Step 4: Create Shipment
-            shippingService.createShipment(order);
+            // Step 4: Schedule Shipping
+            Shipment shipment = shippingClient.schedule(order);
+            ctx.setShipmentId(shipment.getId());
             
-            return order;
+            // All succeeded - confirm order
+            order.setStatus(OrderStatus.CONFIRMED);
+            return orderService.save(order);
             
         } catch (Exception e) {
-            // Compensate in reverse order
-            compensate(state);
-            throw new SagaException("Order saga failed", e);
+            log.error("Saga failed, compensating: {}", e.getMessage());
+            ctx.compensate();  // Execute compensations in reverse order
+            throw new SagaFailedException("Order creation failed", e);
         }
     }
+}
+
+@Data
+public class SagaContext {
+    private Long orderId;
+    private Long paymentId;
+    private Long reservationId;
+    private Long shipmentId;
     
-    private void compensate(SagaState state) {
-        if (state.isInventoryReserved()) {
-            inventoryService.release(state.getOrderId());
-        }
-        if (state.getPaymentId() != null) {
-            paymentService.refund(state.getPaymentId());
-        }
-        if (state.getOrderId() != null) {
-            orderService.cancel(state.getOrderId());
+    private final Deque<Runnable> compensations = new ArrayDeque<>();
+    
+    public void addCompensation(Runnable compensation) {
+        compensations.push(compensation);  // LIFO order
+    }
+    
+    public void compensate() {
+        while (!compensations.isEmpty()) {
+            try {
+                compensations.pop().run();
+            } catch (Exception e) {
+                log.error("Compensation failed: {}", e.getMessage());
+                // Log for manual intervention
+            }
         }
     }
 }
 ```
 
+### Choreography vs Orchestration
+
+| Aspect | Choreography | Orchestration |
+|--------|--------------|---------------|
+| **Control** | Decentralized | Centralized |
+| **Coupling** | Loose | Tighter |
+| **Complexity** | Harder to trace | Easy to understand |
+| **Single Point of Failure** | No | Orchestrator |
+| **Best For** | Simple flows | Complex flows |
+
 ---
 
-## 6. Service Discovery
+## 5. Service Discovery
 
 ### Client-Side Discovery (Eureka)
 
 ```java
-// Register service
+// Eureka Server
 @SpringBootApplication
-@EnableEurekaClient
-public class OrderServiceApplication { }
+@EnableEurekaServer
+public class EurekaServerApplication { }
 
-// Discover and call
-@FeignClient(name = "user-service")  // Uses service name, not URL
+// Service Registration (automatic with dependency)
+// application.yml
+spring:
+  application:
+    name: order-service
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka:8761/eureka/
+  instance:
+    preferIpAddress: true
+
+// Service Discovery
+@FeignClient(name = "user-service")  // Uses service name, not URL!
 public interface UserClient {
     @GetMapping("/users/{id}")
     User getUser(@PathVariable Long id);
 }
 
-// Or with LoadBalancerClient
-@Autowired
-private LoadBalancerClient loadBalancer;
-
-public User getUser(Long id) {
-    ServiceInstance instance = loadBalancer.choose("user-service");
-    String url = instance.getUri() + "/users/" + id;
-    return restTemplate.getForObject(url, User.class);
+// Or with DiscoveryClient
+@Service
+public class DynamicServiceCaller {
+    
+    @Autowired
+    private DiscoveryClient discoveryClient;
+    
+    @Autowired
+    private RestTemplate restTemplate;
+    
+    public User getUser(Long userId) {
+        List<ServiceInstance> instances = 
+            discoveryClient.getInstances("user-service");
+        
+        if (instances.isEmpty()) {
+            throw new ServiceNotFoundException("user-service not found");
+        }
+        
+        // Simple round-robin
+        ServiceInstance instance = instances.get(
+            counter.getAndIncrement() % instances.size());
+        
+        String url = instance.getUri() + "/users/" + userId;
+        return restTemplate.getForObject(url, User.class);
+    }
 }
 ```
 
 ### Server-Side Discovery (Kubernetes)
 
 ```yaml
-# Kubernetes Service
+# Kubernetes Service - built-in service discovery
 apiVersion: v1
 kind: Service
 metadata:
@@ -395,147 +652,192 @@ spec:
   ports:
     - port: 80
       targetPort: 8080
----
-# Access via service name
-# http://user-service/users/123
-```
+  type: ClusterIP
 
 ---
-
-## 7. CQRS Pattern
-
-### Command Query Responsibility Segregation
-
-```mermaid
-graph TD
-    Client --> API
-    
-    subgraph "Write Side (Commands)"
-        API --> CS[Command Service]
-        CS --> WDB[(Write DB - Normalized)]
-    end
-    
-    subgraph "Read Side (Queries)"
-        API --> QS[Query Service]
-        QS --> RDB[(Read DB - Denormalized)]
-    end
-    
-    WDB -->|Events| Sync[Sync Process]
-    Sync --> RDB
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+        - name: user-service
+          image: user-service:latest
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
 ```
-
-### Implementation
 
 ```java
-// Command side
-@Service
-public class OrderCommandService {
-    @Autowired
-    private OrderRepository orderRepository;
-    @Autowired
-    private EventPublisher eventPublisher;
-    
-    @Transactional
-    public void createOrder(CreateOrderCommand command) {
-        Order order = new Order(command);
-        orderRepository.save(order);
-        eventPublisher.publish(new OrderCreatedEvent(order));
-    }
-}
-
-// Query side
-@Service
-public class OrderQueryService {
-    @Autowired
-    private OrderReadRepository readRepository;  // Optimized for reads
-    
-    public OrderView getOrder(Long orderId) {
-        return readRepository.findById(orderId);  // Denormalized view
-    }
-    
-    public List<OrderSummary> getOrdersByCustomer(Long customerId) {
-        return readRepository.findByCustomerId(customerId);
-    }
-}
-
-// Sync process (event listener)
-@Service
-public class OrderProjection {
-    @Autowired
-    private OrderReadRepository readRepository;
-    
-    @EventListener
-    public void on(OrderCreatedEvent event) {
-        OrderView view = OrderView.from(event.getOrder());
-        readRepository.save(view);
-    }
+// In Kubernetes, just use service name
+@FeignClient(name = "user-service", url = "http://user-service")
+public interface UserClient {
+    @GetMapping("/users/{id}")
+    User getUser(@PathVariable Long id);
 }
 ```
 
 ---
 
-## 8. Interview Questions
+## 6. Interview Questions
 
 ### Q1: How do you handle distributed transactions?
 
-**Answer:**
-> "I use the Saga pattern instead of 2PC. Each service performs its local transaction and publishes an event. If a step fails, compensating transactions are triggered to undo previous steps. I prefer choreography for simple flows and orchestration for complex ones."
+```text
+Answer:
+"I avoid 2PC due to its blocking nature and instead use the Saga pattern.
+
+For simple flows: CHOREOGRAPHY
+- Each service publishes events after completing its transaction
+- Other services listen and react
+- Compensating events for rollback
+
+For complex flows: ORCHESTRATION  
+- Central orchestrator controls the flow
+- Easier to track saga state
+- Simpler compensations
+
+Example: Order creation
+1. OrderService creates order → publishes OrderCreated
+2. PaymentService charges → publishes PaymentCompleted
+3. InventoryService reserves → publishes ItemsReserved
+
+If step 3 fails:
+- Publishes ReservationFailed
+- PaymentService listens, refunds → PaymentRefunded
+- OrderService listens, cancels order
+
+I also use idempotency keys to handle duplicate events safely."
+```
 
 ### Q2: How do you prevent cascade failures?
 
-**Answer:**
-> "I implement several resilience patterns:
-> 1. **Circuit Breaker** - Stop calling failing services
-> 2. **Timeout** - Don't wait forever
-> 3. **Retry with backoff** - Handle transient failures
-> 4. **Bulkhead** - Isolate failures to specific components
-> 5. **Fallback** - Return cached or default data"
+```text
+Answer:
+"I implement multiple resilience patterns:
 
-### Q3: How do you debug issues across services?
+1. CIRCUIT BREAKER (Resilience4j):
+   - Track failure rate over sliding window
+   - Open circuit at 50% failure rate
+   - Fast-fail without waiting for timeout
+   - Try half-open after 30 seconds
 
-**Answer:**
-> "I implement distributed tracing using tools like Jaeger or Zipkin. Every request gets a correlation ID that's propagated across all service calls. This allows me to trace a single request through the entire system and identify bottlenecks or failures."
+2. TIMEOUT:
+   - Never wait forever (3 seconds max)
+   - Use CompletableFuture with timeout
 
-```java
-// Auto-propagated with Spring Cloud Sleuth
-@GetMapping("/orders/{id}")
-public Order getOrder(@PathVariable Long id) {
-    log.info("Getting order {}", id);  // Trace ID in logs
-    User user = userClient.getUser(order.getUserId());  // Trace propagated
-    return order;
-}
+3. RETRY WITH BACKOFF:
+   - Retry transient failures
+   - Exponential backoff: 500ms, 1s, 2s
+   - Max 3 retries
+   - Don't retry non-transient errors
+
+4. BULKHEAD:
+   - Limit concurrent calls (25 per service)
+   - Isolate thread pools
+   - One service failure doesn't exhaust threads
+
+5. FALLBACK:
+   - Return cached data
+   - Return default response
+   - Queue for later processing"
 ```
 
----
-
-## Quick Reference
+### Q3: When would you NOT use microservices?
 
 ```text
-Communication Patterns:
-- Sync: REST/gRPC (simple, coupled)
-- Async: Events/Messages (decoupled, eventual consistency)
+Answer:
+"Microservices aren't always the right choice:
 
-Resilience Patterns:
-- Circuit Breaker: Stop calling failing services
-- Retry: Handle transient failures
-- Timeout: Don't wait forever
-- Bulkhead: Isolate failures
+DON'T USE when:
+├── Small team (under 5 developers)
+├── Simple domain with unclear boundaries
+├── Tight deadline (monolith is faster to build)
+├── No DevOps maturity (CI/CD, monitoring)
+├── Low traffic (complexity not justified)
+└── Constant cross-service transactions needed
 
-Distributed Transactions:
-- Saga: Choreography or Orchestration
-- Compensating transactions for rollback
+START WITH MONOLITH when:
+├── Exploring new domain
+├── Team is learning the business
+├── MVP or prototype phase
 
-Data Patterns:
-- Database per service (isolation)
-- CQRS: Separate read/write models
-- Event Sourcing: Store events, not state
+MIGRATE TO MICROSERVICES when:
+├── Team grows beyond 10
+├── Need independent scaling
+├── Clear bounded contexts emerge
+├── Different tech stacks needed
+└── Deployment bottlenecks appear
 
-Observability:
-- Distributed Tracing (Jaeger/Zipkin)
-- Centralized Logging (ELK)
-- Metrics (Prometheus/Grafana)
+I use the 'Strangler Fig' pattern for migration -
+gradually extract services from the monolith."
 ```
 
 ---
 
-**Next:** [API Design Best Practices →](../11-api-design/01-intro)
+## Quick Reference Card
+
+```text
+┌──────────────────────────────────────────────────────────────────────┐
+│              MICROSERVICES PATTERNS CHEAT SHEET                      │
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                       │
+│ COMMUNICATION:                                                        │
+│   Sync (REST/gRPC)   Immediate response, tight coupling              │
+│   Async (Events)     Fire-and-forget, loose coupling                 │
+│                                                                       │
+│ API GATEWAY:                                                          │
+│   ├── Authentication, Rate limiting                                  │
+│   ├── Routing, Load balancing                                        │
+│   └── Circuit breaker, Response aggregation                          │
+│                                                                       │
+│ CIRCUIT BREAKER STATES:                                               │
+│   Closed     → Normal operation                                      │
+│   Open       → Fast-fail all requests                                │
+│   Half-Open  → Test with limited requests                            │
+│                                                                       │
+│ RESILIENCE4J CONFIG:                                                  │
+│   failureRateThreshold: 50%                                          │
+│   waitDurationInOpenState: 30s                                       │
+│   slidingWindowSize: 10                                              │
+│                                                                       │
+│ SAGA PATTERN:                                                         │
+│   Choreography  → Decentralized, events                              │
+│   Orchestration → Centralized controller                             │
+│   Compensation  → Undo in reverse order                              │
+│                                                                       │
+│ SERVICE DISCOVERY:                                                    │
+│   Client-side   → Eureka, Consul                                     │
+│   Server-side   → Kubernetes DNS                                     │
+│                                                                       │
+│ WHEN TO USE MICROSERVICES:                                            │
+│   ✅ Large team (10+), clear domains, independent scaling            │
+│   ❌ Small team, unclear domain, no DevOps maturity                  │
+│                                                                       │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+**Next:** [3. Service Mesh & Observability →](./service-mesh-observability)

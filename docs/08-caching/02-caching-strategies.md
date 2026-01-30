@@ -492,4 +492,4 @@ Key Metrics:
 
 ---
 
-**Next:** [Message Queues & Event-Driven Architecture →](../09-message-queues/01-intro)
+**Next:** [3. Redis Deep Dive →](./redis-deep-dive)

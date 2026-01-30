@@ -871,4 +871,4 @@ Key considerations:
 
 ---
 
-**Next:** [7. Distributed Systems →](../07-distributed-systems/01-intro)
+**Next:** [4. OAuth 2.0 & OIDC Deep Dive →](./oauth2-oidc-deep-dive)

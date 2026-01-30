@@ -428,4 +428,4 @@ HTTP Status:
 
 ---
 
-**Next:** [Computer Networks →](../05-computer-networks/01-intro)
+**Next:** [3. CORS Deep Dive →](./cors-deep-dive)

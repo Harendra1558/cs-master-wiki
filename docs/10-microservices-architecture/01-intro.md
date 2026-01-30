@@ -1,49 +1,145 @@
 ---
 sidebar_position: 1
-title: Syllabus & Overview
+title: 1. Introduction
+description: Master microservices architecture, patterns, and best practices for backend interviews.
+keywords: [microservices, service mesh, api gateway, service discovery, distributed systems]
 ---
 
-# 11. MICROSERVICES ARCHITECTURE
+# Microservices Architecture
 
-## Topics Covered
+:::info Interview Importance ⭐⭐⭐⭐⭐
+Microservices is a **top interview topic** for senior backend roles. You'll be asked about patterns like Circuit Breaker, Saga, Service Mesh, and deployment strategies.
+:::
+
+## Why Microservices?
 
 ```text
-SERVICE COMMUNICATION
-- REST
-- gRPC
-- Messaging
-
-SERVICE DISCOVERY
-- Client-side
-- Server-side
-- DNS-based
-
-API GATEWAY
-- Routing
-- Auth
-- Rate limiting
-- Aggregation
-
-RESILIENCE
-- Circuit breaker
-- Bulkhead
-- Retry + backoff
-- Timeouts
-- Fallbacks
-
-DEPLOYMENT
-- Blue-Green
-- Canary
-- Rolling updates
-- Feature flags
-
-DATA MANAGEMENT
-- Database per service
-- Shared DB anti-pattern
-- API composition
-- CQRS
-- Event sourcing
+┌─────────────────────────────────────────────────────────────────────┐
+│                  MONOLITH VS MICROSERVICES                           │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│   MONOLITH:                         MICROSERVICES:                  │
+│   ┌───────────────────┐             ┌─────┐ ┌─────┐ ┌─────┐        │
+│   │                   │             │ User│ │Order│ │ Pay │        │
+│   │    All Features   │      →      │ Svc │ │ Svc │ │ Svc │        │
+│   │    Single Deploy  │             └──┬──┘ └──┬──┘ └──┬──┘        │
+│   │                   │                │       │       │            │
+│   └─────────┬─────────┘             ┌──┴──┐ ┌──┴──┐ ┌──┴──┐        │
+│             │                       │ DB  │ │ DB  │ │ DB  │        │
+│        ┌────┴────┐                  └─────┘ └─────┘ └─────┘        │
+│        │   DB    │                                                  │
+│        └─────────┘                                                  │
+│                                                                      │
+│   ❌ Single point of failure       ✅ Independent scaling           │
+│   ❌ Full redeploy for changes     ✅ Independent deployment        │
+│   ❌ Technology lock-in            ✅ Tech flexibility              │
+│   ❌ Hard to scale specific parts  ✅ Fault isolation               │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘
 ```
 
-### Status
-🚧 Content Map Created - Implementation In Progress
+---
+
+## 📚 Chapter Overview
+
+| Chapter | Topic | What You'll Learn |
+|---------|-------|-------------------|
+| [2. Core Patterns](./microservices-patterns) | Communication & Resilience | API Gateway, Circuit Breaker, Saga, Service Discovery |
+| [3. Service Mesh & Observability](./service-mesh-observability) | Infrastructure | Istio, Envoy, Distributed Tracing, Metrics |
+| [4. Deployment Strategies](./deployment-strategies) | DevOps | Blue-Green, Canary, Rolling Updates, Feature Flags |
+
+---
+
+## 🎯 Syllabus
+
+### Core Microservices Patterns
+```text
+├── Monolith vs Microservices
+├── Service Communication
+│   ├── Synchronous (REST, gRPC)
+│   └── Asynchronous (Events, Messages)
+├── API Gateway Pattern
+├── Service Discovery
+│   ├── Client-side (Eureka)
+│   └── Server-side (Kubernetes)
+├── Resilience Patterns
+│   ├── Circuit Breaker
+│   ├── Retry + Exponential Backoff
+│   ├── Timeout
+│   ├── Bulkhead
+│   └── Fallback
+└── Saga Pattern (Distributed Transactions)
+    ├── Choreography
+    └── Orchestration
+```
+
+### Service Mesh & Observability
+```text
+├── Service Mesh
+│   ├── Istio / Envoy
+│   ├── Sidecar Pattern
+│   ├── Traffic Management
+│   └── mTLS (Security)
+├── Distributed Tracing
+│   ├── OpenTelemetry
+│   ├── Jaeger / Zipkin
+│   └── Correlation IDs
+├── Observability
+│   ├── Metrics (Prometheus/Grafana)
+│   ├── Logging (ELK Stack)
+│   └── Alerting
+└── Health Checks & Readiness
+```
+
+### Deployment & Configuration
+```text
+├── Deployment Strategies
+│   ├── Blue-Green Deployment
+│   ├── Canary Releases
+│   ├── Rolling Updates
+│   └── Feature Flags
+├── Configuration Management
+│   ├── Spring Cloud Config
+│   ├── HashiCorp Vault
+│   └── Environment-specific configs
+└── Container Orchestration
+    └── Kubernetes basics
+```
+
+### Data Patterns
+```text
+├── Database per Service
+├── API Composition
+├── Backend for Frontend (BFF)
+└── Strangler Fig Pattern (Migration)
+```
+
+---
+
+## ⚠️ Topics Covered Elsewhere
+
+To avoid duplication, these related topics are in other sections:
+
+| Topic | Location | Why Separate |
+|-------|----------|--------------|
+| CQRS & Event Sourcing | [Distributed Systems](../07-distributed-systems/event-sourcing-cqrs) | Fundamental distributed pattern |
+| Distributed Transactions (2PC, Saga theory) | [Distributed Systems](../07-distributed-systems/distributed-transactions) | Core distributed concept |
+| Kafka, RabbitMQ, SQS | [Message Queues](../09-message-queues/01-intro) | Deep dive into messaging |
+| REST API Best Practices | [API Design](../11-api-design/rest-best-practices) | Dedicated API chapter |
+
+---
+
+## When to Use Microservices
+
+| Use Microservices When | Stick with Monolith When |
+|------------------------|--------------------------|
+| Large team (10+ developers) | Small team (under 5) |
+| Need independent scaling | Uniform scaling is OK |
+| Different tech stacks needed | Single tech stack |
+| High availability required | Simpler deployment OK |
+| Clear domain boundaries | Domain is unclear |
+| Mature DevOps practices | Limited DevOps experience |
+
+---
+
+**Next:** [2. Core Microservices Patterns →](./microservices-patterns)
