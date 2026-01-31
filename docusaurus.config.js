@@ -162,7 +162,10 @@ const config = {
           ignorePatterns: ["/tags/**"],
           filename: "sitemap.xml",
         },
-        // gtag removed to prevent errors
+        gtag: {
+          trackingID: "G-L37WFPV80X",
+          anonymizeIP: true, // Privacy-friendly: anonymizes visitor IP
+        },
       }),
     ],
   ],
