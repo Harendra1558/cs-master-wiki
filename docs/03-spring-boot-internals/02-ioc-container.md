@@ -746,4 +746,4 @@ List<T> → Inject all of type
 
 ---
 
-**Next:** [Spring Transactions & Common Pitfalls →](./03-spring-transactions)
+**Next:** [Spring Transactions & Common Pitfalls →](./03-spring-transactions.md)

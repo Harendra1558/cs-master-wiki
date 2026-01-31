@@ -1,17 +1,29 @@
 {
     "name": "Harendra's Portfolio",
     "short_name": "Harendra",
-    "description": "Harendra's Portfolio & CS Wiki",
+    "description": "Harendra's Portfolio & CS Wiki - Complete backend engineering guide",
     "start_url": "/",
     "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#667eea",
+    "background_color": "#0a0a0f",
+    "theme_color": "#6366f1",
+    "orientation": "portrait-primary",
     "icons": [
         {
-            "src": "img/logo.svg",
-            "sizes": "192x192 512x512",
+            "src": "/img/logo.svg",
+            "sizes": "any",
             "type": "image/svg+xml",
-            "purpose": "any maskable"
+            "purpose": "any"
+        },
+        {
+            "src": "/img/logo.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "maskable"
         }
-    ]
+    ],
+    "categories": [
+        "education",
+        "developer tools"
+    ],
+    "lang": "en"
 }

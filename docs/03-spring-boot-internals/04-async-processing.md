@@ -862,4 +862,4 @@ DON'T USE @ASYNC FOR
 
 ---
 
-**Next:** [Bean Scope & Concurrency →](./05-bean-scope-concurrency)
+**Next:** [Bean Scope & Concurrency →](./05-bean-scope-concurrency.md)

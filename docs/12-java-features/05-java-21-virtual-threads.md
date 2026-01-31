@@ -672,4 +672,4 @@ It's like try-with-resources for concurrency."
 
 **Back:** [4. Java 9-17 Features ←](./java-9-17-features)
 
-**Next Section:** [13. Low Level Design (LLD) →](../13-lld/01-intro)
+**Next Section:** [13. Low Level Design (LLD) →](../13-lld/01-intro.md)

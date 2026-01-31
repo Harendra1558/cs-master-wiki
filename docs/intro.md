@@ -37,7 +37,7 @@ This wiki contains **82 comprehensive chapters** covering every topic you need t
 
 ## 🔥 Core Java & Backend
 
-### [1. Java & JVM Internals](/docs/java-jvm-internals/intro) ⭐⭐⭐⭐⭐
+### [1. Java & JVM Internals](./01-java-jvm-internals/01-intro.md) ⭐⭐⭐⭐⭐
 Deep dive into JVM internals - the foundation of every Java application.
 
 | Chapter | Topics Covered |
@@ -49,7 +49,7 @@ Deep dive into JVM internals - the foundation of every Java application.
 
 ---
 
-### [2. DBMS & Data Persistence](/docs/dbms-data-persistence/intro) ⭐⭐⭐⭐⭐
+### [2. DBMS & Data Persistence](./02-dbms-data-persistence/01-intro.md) ⭐⭐⭐⭐⭐
 Master database fundamentals - critical for any backend role.
 
 | Chapter | Topics Covered |
@@ -63,7 +63,7 @@ Master database fundamentals - critical for any backend role.
 
 ---
 
-### [3. Spring Boot Internals](/docs/spring-boot-internals/intro) ⭐⭐⭐⭐⭐
+### [3. Spring Boot Internals](./03-spring-boot-internals/01-intro.md) ⭐⭐⭐⭐⭐
 Go beyond annotations - understand how Spring Boot really works.
 
 | Chapter | Topics Covered |
@@ -78,7 +78,7 @@ Go beyond annotations - understand how Spring Boot really works.
 
 ---
 
-### [12. Java 8-21 Features](/docs/java-features/intro) ⭐⭐⭐⭐
+### [12. Java 8-21 Features](./12-java-features/01-intro.md) ⭐⭐⭐⭐
 Modern Java features that interviewers love to ask about.
 
 | Chapter | Topics Covered |
@@ -92,7 +92,7 @@ Modern Java features that interviewers love to ask about.
 
 ## 🌐 Systems & Networks
 
-### [4. Operating Systems](/docs/operating-systems/intro) ⭐⭐⭐⭐
+### [4. Operating Systems](./04-operating-systems/01-intro.md) ⭐⭐⭐⭐
 Essential OS concepts for debugging and performance tuning.
 
 | Chapter | Topics Covered |
@@ -104,7 +104,7 @@ Essential OS concepts for debugging and performance tuning.
 
 ---
 
-### [5. Computer Networks](/docs/computer-networks/intro) ⭐⭐⭐⭐⭐
+### [5. Computer Networks](./05-computer-networks/01-intro.md) ⭐⭐⭐⭐⭐
 Networking fundamentals every backend engineer must know.
 
 | Chapter | Topics Covered |
@@ -122,7 +122,7 @@ Networking fundamentals every backend engineer must know.
 
 ## 🔐 Security
 
-### [6. Security & Authentication](/docs/security-authentication/intro) ⭐⭐⭐⭐⭐
+### [6. Security & Authentication](./06-security-authentication/01-intro.md) ⭐⭐⭐⭐⭐
 Build secure applications - non-negotiable for production systems.
 
 | Chapter | Topics Covered |
@@ -138,7 +138,7 @@ Build secure applications - non-negotiable for production systems.
 
 ## 🏗️ Distributed Systems
 
-### [7. Distributed Systems](/docs/distributed-systems/intro) ⭐⭐⭐⭐⭐
+### [7. Distributed Systems](./07-distributed-systems/01-intro.md) ⭐⭐⭐⭐⭐
 Core concepts for building scalable, reliable systems.
 
 | Chapter | Topics Covered |
@@ -153,7 +153,7 @@ Core concepts for building scalable, reliable systems.
 
 ---
 
-### [8. Caching](/docs/caching/intro) ⭐⭐⭐⭐
+### [8. Caching](./08-caching/01-intro.md) ⭐⭐⭐⭐
 Speed up your applications with effective caching.
 
 | Chapter | Topics Covered |
@@ -165,7 +165,7 @@ Speed up your applications with effective caching.
 
 ---
 
-### [9. Message Queues](/docs/message-queues/intro) ⭐⭐⭐⭐⭐
+### [9. Message Queues](./09-message-queues/01-intro.md) ⭐⭐⭐⭐⭐
 Decouple services with async communication.
 
 | Chapter | Topics Covered |
@@ -177,7 +177,7 @@ Decouple services with async communication.
 
 ---
 
-### [10. Microservices Architecture](/docs/microservices-architecture/intro) ⭐⭐⭐⭐⭐
+### [10. Microservices Architecture](./10-microservices-architecture/01-intro.md) ⭐⭐⭐⭐⭐
 Design and build production microservices.
 
 | Chapter | Topics Covered |
@@ -191,7 +191,7 @@ Design and build production microservices.
 
 ## 📐 API & Design
 
-### [11. API Design](/docs/api-design/intro) ⭐⭐⭐⭐
+### [11. API Design](./11-api-design/01-intro.md) ⭐⭐⭐⭐
 Design APIs that are easy to use and hard to misuse.
 
 | Chapter | Topics Covered |
@@ -202,7 +202,7 @@ Design APIs that are easy to use and hard to misuse.
 
 ---
 
-### [13. Low Level Design (LLD)](/docs/lld/intro) ⭐⭐⭐⭐⭐
+### [13. Low Level Design (LLD)](./13-lld/01-intro.md) ⭐⭐⭐⭐⭐
 Object-oriented design and patterns for interviews.
 
 | Chapter | Topics Covered |
@@ -214,7 +214,7 @@ Object-oriented design and patterns for interviews.
 
 ---
 
-### [14. High Level Design (HLD)](/docs/hld/intro) ⭐⭐⭐⭐⭐
+### [14. High Level Design (HLD)](./14-hld/01-intro.md) ⭐⭐⭐⭐⭐
 System design interviews - the most critical skill for SDE-2+.
 
 | Chapter | Topics Covered |
@@ -268,18 +268,18 @@ System design interviews - the most critical skill for SDE-2+.
 
 | Topic | Chapter | Interview Frequency |
 |-------|---------|---------------------|
-| JVM Architecture & Memory | [JVM Internals](/docs/java-jvm-internals/jvm-architecture) | ⭐⭐⭐⭐⭐ |
-| Garbage Collection | [JVM Internals](/docs/java-jvm-internals/garbage-collection) | ⭐⭐⭐⭐⭐ |
-| Database Indexes | [DBMS](/docs/dbms-data-persistence/indexes) | ⭐⭐⭐⭐⭐ |
-| Transaction Isolation | [DBMS](/docs/dbms-data-persistence/transactions) | ⭐⭐⭐⭐⭐ |
-| Spring IoC & Bean Lifecycle | [Spring Boot](/docs/spring-boot-internals/ioc-container) | ⭐⭐⭐⭐⭐ |
-| @Transactional internals | [Spring Boot](/docs/spring-boot-internals/spring-transactions) | ⭐⭐⭐⭐⭐ |
-| JWT & OAuth 2.0 | [Security](/docs/security-authentication/auth-security) | ⭐⭐⭐⭐⭐ |
-| CAP Theorem | [Distributed Systems](/docs/distributed-systems/cap-theorem) | ⭐⭐⭐⭐⭐ |
-| Kafka Deep Dive | [Message Queues](/docs/message-queues/kafka-deep-dive) | ⭐⭐⭐⭐⭐ |
-| URL Shortener Design | [HLD](/docs/hld/url-shortener) | ⭐⭐⭐⭐⭐ |
-| Rate Limiter Design | [HLD](/docs/hld/rate-limiter) | ⭐⭐⭐⭐⭐ |
-| Twitter Feed Design | [HLD](/docs/hld/twitter-feed) | ⭐⭐⭐⭐⭐ |
+| JVM Architecture & Memory | [JVM Internals](./01-java-jvm-internals/02-jvm-architecture.md) | ⭐⭐⭐⭐⭐ |
+| Garbage Collection | [JVM Internals](./01-java-jvm-internals/03-garbage-collection.md) | ⭐⭐⭐⭐⭐ |
+| Database Indexes | [DBMS](./02-dbms-data-persistence/02-indexes.md) | ⭐⭐⭐⭐⭐ |
+| Transaction Isolation | [DBMS](./02-dbms-data-persistence/03-transactions.md) | ⭐⭐⭐⭐⭐ |
+| Spring IoC & Bean Lifecycle | [Spring Boot](./03-spring-boot-internals/02-ioc-container.md) | ⭐⭐⭐⭐⭐ |
+| @Transactional internals | [Spring Boot](./03-spring-boot-internals/03-spring-transactions.md) | ⭐⭐⭐⭐⭐ |
+| JWT & OAuth 2.0 | [Security](./06-security-authentication/02-auth-security.md) | ⭐⭐⭐⭐⭐ |
+| CAP Theorem | [Distributed Systems](./07-distributed-systems/02-cap-theorem.md) | ⭐⭐⭐⭐⭐ |
+| Kafka Deep Dive | [Message Queues](./09-message-queues/02-kafka-deep-dive.md) | ⭐⭐⭐⭐⭐ |
+| URL Shortener Design | [HLD](./14-hld/03-url-shortener.md) | ⭐⭐⭐⭐⭐ |
+| Rate Limiter Design | [HLD](./14-hld/04-rate-limiter.md) | ⭐⭐⭐⭐⭐ |
+| Twitter Feed Design | [HLD](./14-hld/05-twitter-feed.md) | ⭐⭐⭐⭐⭐ |
 
 ### 🛠️ Code Examples
 
@@ -329,4 +329,4 @@ Built by **Harendra Kumar** | Backend Engineer
 
 ---
 
-**Ready to start?** Begin with [Java & JVM Internals →](/docs/java-jvm-internals/intro)
+**Ready to start?** Begin with [Java & JVM Internals →](./01-java-jvm-internals/01-intro.md)

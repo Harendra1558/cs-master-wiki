@@ -997,6 +997,6 @@ Why exponential backoff?
 
 ---
 
-**Back to:** [← Message Queues Overview](./intro)
+**Back to:** [← Message Queues Overview](./01-intro.md)
 
-**Next:** [10. Microservices Architecture →](../10-microservices-architecture/01-intro)
+**Next:** [10. Microservices Architecture →](../10-microservices-architecture/01-intro.md)

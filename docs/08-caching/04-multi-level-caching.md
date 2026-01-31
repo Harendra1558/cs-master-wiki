@@ -795,4 +795,4 @@ Answer:
 
 ---
 
-**Next:** [9. Message Queues & Event-Driven Architecture →](../09-message-queues/01-intro)
+**Next:** [9. Message Queues & Event-Driven Architecture →](../09-message-queues/01-intro.md)

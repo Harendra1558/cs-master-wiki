@@ -885,6 +885,6 @@ Most internal systems use crash-recovery model because:
 
 **Congratulations!** You've completed the Distributed Systems section. These concepts are essential for designing and building reliable, scalable systems.
 
-**Back to:** [← Distributed Systems Overview](./intro)
+**Back to:** [← Distributed Systems Overview](./01-intro.md)
 
-**Next:** [8. Caching →](../08-caching/01-intro)
+**Next:** [8. Caching →](../08-caching/01-intro.md)

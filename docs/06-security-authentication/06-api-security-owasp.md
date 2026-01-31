@@ -837,4 +837,4 @@ TESTING:
 
 **Back:** [5. Spring Security Deep Dive ←](./spring-security-deep-dive)
 
-**Next Section:** [7. Distributed Systems →](../07-distributed-systems/01-intro)
+**Next Section:** [7. Distributed Systems →](../07-distributed-systems/01-intro.md)

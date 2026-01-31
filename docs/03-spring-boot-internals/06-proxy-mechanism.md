@@ -771,4 +771,4 @@ HOW ANNOTATIONS USE PROXIES
 
 ---
 
-**Next:** [Servlet & Web Model →](./07-servlet-web-model)
+**Next:** [Servlet & Web Model →](./07-servlet-web-model.md)

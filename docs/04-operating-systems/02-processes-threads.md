@@ -383,4 +383,4 @@ ps, top, htop, pstree, jstack
 
 ---
 
-**Next:** [Memory Management & Virtual Memory →](./03-memory-management)
+**Next:** [Memory Management & Virtual Memory →](./03-memory-management.md)

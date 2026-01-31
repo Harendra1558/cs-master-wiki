@@ -692,4 +692,4 @@ WHEN TO USE WEBFLUX
 
 **This concludes the Spring Boot Internals section!**
 
-**Go back to:** [Introduction & Syllabus](./01-intro)
+**Go back to:** [Introduction & Syllabus](./01-intro.md)

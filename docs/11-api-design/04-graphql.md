@@ -731,6 +731,6 @@ Answer:
 
 ---
 
-**Back to:** [← API Design Overview](./intro)
+**Back to:** [← API Design Overview](./01-intro.md)
 
-**Next:** [12. Java 8+ Features →](../12-java-features/01-intro)
+**Next:** [12. Java 8+ Features →](../12-java-features/01-intro.md)

@@ -5,7 +5,7 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://harendra1558.github.io/cs-master-wiki/sitemap.xml
+Sitemap: https://harendra-dev.vercel.app/sitemap.xml
 
 # Disallow specific paths
 Disallow: /admin/

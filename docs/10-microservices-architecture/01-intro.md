@@ -122,10 +122,10 @@ To avoid duplication, these related topics are in other sections:
 
 | Topic | Location | Why Separate |
 |-------|----------|--------------|
-| CQRS & Event Sourcing | [Distributed Systems](../07-distributed-systems/event-sourcing-cqrs) | Fundamental distributed pattern |
-| Distributed Transactions (2PC, Saga theory) | [Distributed Systems](../07-distributed-systems/distributed-transactions) | Core distributed concept |
-| Kafka, RabbitMQ, SQS | [Message Queues](../09-message-queues/01-intro) | Deep dive into messaging |
-| REST API Best Practices | [API Design](../11-api-design/rest-best-practices) | Dedicated API chapter |
+| CQRS & Event Sourcing | [Distributed Systems](../07-distributed-systems/06-event-sourcing-cqrs.md) | Fundamental distributed pattern |
+| Distributed Transactions (2PC, Saga theory) | [Distributed Systems](../07-distributed-systems/05-distributed-transactions.md) | Core distributed concept |
+| Kafka, RabbitMQ, SQS | [Message Queues](../09-message-queues/01-intro.md) | Deep dive into messaging |
+| REST API Best Practices | [API Design](../11-api-design/02-rest-best-practices.md) | Dedicated API chapter |
 
 ---
 

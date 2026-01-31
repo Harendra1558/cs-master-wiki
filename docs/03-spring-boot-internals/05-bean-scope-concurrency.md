@@ -624,4 +624,4 @@ PROTOTYPE-IN-SINGLETON SOLUTIONS
 
 ---
 
-**Next:** [Proxy Mechanism Deep Dive →](./06-proxy-mechanism)
+**Next:** [Proxy Mechanism Deep Dive →](./06-proxy-mechanism.md)

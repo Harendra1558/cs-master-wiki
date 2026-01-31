@@ -7,7 +7,7 @@ const config = {
   tagline: "Software Engineer | Backend Specialist | System Design Enthusiast",
   url: "https://harendra-dev.vercel.app",
   baseUrl: "/",
-  onBrokenLinks: "warn",
+  onBrokenLinks: "throw",
   // onBrokenMarkdownLinks: "warn", // Deprecated, using default behavior
   favicon: "img/logo.svg",
 
@@ -47,73 +47,78 @@ const config = {
       "@docusaurus/plugin-client-redirects",
       {
         redirects: [
-          // Redirect /docs/java-jvm-internals to the correct category page
+          // Redirects temporarily disabled to fix build
+          // {
+          //   from: "/docs/java-jvm-internals",
+          //   to: "/docs/category/1-java--jvm-internals",
+          // },
+          // {
+          //   from: "/docs/dbms-data-persistence",
+          //   to: "/docs/category/2-dbms--data-persistence",
+          // },
+          // {
+          //   from: "/docs/spring-boot-internals",
+          //   to: "/docs/category/3-spring-boot-internals",
+          // },
+        ],
+      },
+    ],
+    // PWA Plugin for offline support and app installability
+    [
+      '@docusaurus/plugin-pwa',
+      {
+        debug: false,
+        offlineModeActivationStrategies: [
+          'appInstalled',
+          'standalone',
+          'queryString',
+        ],
+        pwaHead: [
           {
-            from: "/docs/java-jvm-internals",
-            to: "/docs/category/1-java--jvm-internals",
+            tagName: 'link',
+            attributes: {
+              rel: 'icon',
+              href: '/img/logo.svg',
+            },
           },
-          // Additional common redirect patterns
           {
-            from: "/docs/dbms-data-persistence",
-            to: "/docs/category/2-dbms--data-persistence",
+            tagName: 'link',
+            attributes: {
+              rel: 'manifest',
+              href: '/manifest.json',
+            },
           },
           {
-            from: "/docs/spring-boot-internals",
-            to: "/docs/category/3-spring-boot-internals",
+            tagName: 'meta',
+            attributes: {
+              name: 'theme-color',
+              content: '#6366f1',
+            },
+          },
+          {
+            tagName: 'meta',
+            attributes: {
+              name: 'apple-mobile-web-app-capable',
+              content: 'yes',
+            },
+          },
+          {
+            tagName: 'meta',
+            attributes: {
+              name: 'apple-mobile-web-app-status-bar-style',
+              content: 'black-translucent',
+            },
+          },
+          {
+            tagName: 'link',
+            attributes: {
+              rel: 'apple-touch-icon',
+              href: '/img/logo.svg',
+            },
           },
         ],
       },
     ],
-    // PWA plugin temporarily disabled - requires swizzled PwaReloadPopup component
-    // Re-enable after running: npx docusaurus swizzle @docusaurus/plugin-pwa PwaReloadPopup
-    // [
-    //   '@docusaurus/plugin-pwa',
-    //   {
-    //     debug: true,
-    //     offlineModeActivationStrategies: [
-    //       'appInstalled',
-    //       'standalone',
-    //       'queryString',
-    //     ],
-    //     pwaHead: [
-    //       {
-    //         tagName: 'link',
-    //         attributes: {
-    //           rel: 'icon',
-    //           href: '/img/logo.svg',
-    //         },
-    //       },
-    //       {
-    //         tagName: 'link',
-    //         attributes: {
-    //           rel: 'manifest',
-    //           href: '/manifest.json',
-    //         },
-    //       },
-    //       {
-    //         tagName: 'meta',
-    //         attributes: {
-    //           name: 'theme-color',
-    //           content: '#667eea',
-    //         },
-    //       },
-    //       {
-    //         tagName: 'meta',
-    //         attributes: {
-    //           name: 'apple-mobile-web-app-capable',
-    //           content: 'yes',
-    //         },
-    //       },
-    //       {
-    //         tagName: 'meta',
-    //         attributes: {
-    //           name: 'apple-mobile-web-app-status-bar-style',
-    //           content: '#000',
-    //         },
-    //       },
-    //     ],
-    //   },
-    // ],
   ],
 
 
